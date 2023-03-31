@@ -1135,6 +1135,8 @@ for row in AFdatareader:
                 mysubmit_type = ''
             if ('docker' in options.machine):
                 mysubmit_type = ''
+            if ('docker' in options.machine):
+                mysubmit_type = ''
             if ((sitenum % npernode) == 0):
                 if (os.path.isfile(caseroot+'/'+ad_case_firstsite+'/case.run')):
                     input = open(caseroot+'/'+ad_case_firstsite+'/case.run')
