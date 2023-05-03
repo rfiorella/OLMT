@@ -87,6 +87,9 @@ parser.add_option("--nofnsp", action="store_true", dest="nofnsp", default=False,
                   help='Do not perform final spinup simulation')
 parser.add_option("--notrans", action="store_true", dest="notrans", default=False, \
                   help='Do not perform transient simulation (spinup only)')
+parser.add_option("--finidat", dest="finidat", default='', \
+                  help = 'Full path of ELM restart file to use (for transient only)')
+
 
 # model input options
 parser.add_option("--site", dest="site", default='', \
