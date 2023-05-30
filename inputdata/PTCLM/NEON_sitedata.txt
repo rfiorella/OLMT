@@ -1,48 +1,48 @@
-﻿site_code,name,state,lon,lat,elev,startyear,endyear,alignyear
-neABBY,"Abby Road NEON",WA,-122.3303,45.7624,365,2018,2022,1851
-neBARR,"Utqiaġvik NEON",AK,-156.6194,71.2824,4,2018,2022,1851
-neBART,"Bartlett Experimental Forest NEON",NH,-71.2874,44.0639,274,2018,2022,1851
-neBLAN,"Blandy Experimental Farm NEON",VA,-78.0418,39.0337,183,2018,2022,1851
-neBONA,"Caribou-Poker Creeks Research Watershed NEON",AK,-147.5026,65.1540,230,2018,2022,1851
-neCLBJ,"Lyndon B. Johnson National Grassland NEON",TX,-97.5700,33.4012,272,2018,2022,1851
-neCPER,"Central Plains Experimental Range NEON",CO,-104.7456,40.8155,1654,2018,2022,1851
-neDCFS,"Dakota Coteau Field Site NEON",ND,-99.1066,47.1617,575,2018,2022,1851
-neDEJU,"Delta Junction NEON",AK,-145.7514,63.8811,517,2018,2022,1851
-neDELA,"Dead Lake NEON",AL,-87.8039,32.5417,25,2018,2022,1851
-neDSNY,"Disney Wilderness Preserve NEON",FL,-81.4362,28.1251,20,2018,2022,1851
-neGRSM,"Great Smoky Mountains National Park NEON",TN,-83.5020,35.6890,575,2018,2022,1851
-neGUAN,"Guanica Forest NEON",PR,-66.8687,17.9696,125,2018,2022,1851
-neHARV,"Harvard Forest & Quabbin Watershed NEON",MA,-72.1727,42.5369,348,2018,2022,1851
-neHEAL,"Healy NEON",AK,-149.2134,63.8758,677,2018,2022,1851
-neJERC,"The Jones Center At Ichauway NEON",GA,-84.4686,31.1948,47,2018,2022,1851
-neJORN,"Jornada Experimental Range NEON",NM,-106.8425,32.5907,1324,2018,2022,1851
-neKONA,"Konza Prairie Agroecosystem NEON",KS,-96.6129,39.1104,323,2018,2022,1851
-neKONZ,"Konza Prairie Biological Station NEON",KS,-96.5631,39.1008,414,2018,2022,1851
-neLAJA,"Lajas Experimental Station NEON",PR,-67.0769,18.0213,16,2018,2022,1851
-neLENO,"Lenoir Landing NEON",AL,-88.1612,31.8539,13,2018,2022,1851
-neMLBS,"Mountain Lake Biological Station NEON",VA,-80.5248,37.3783,1170,2018,2022,1851
-neMOAB,"Moab NEON",UT,-109.3883,38.2483,1799,2018,2022,1851
-neNIWO,"Niwot Ridge NEON",CO,-105.5824,40.0543,3490,2018,2022,1851
-neNOGP,"Northern Great Plains Research Laboratory NEON",ND,-100.9154,46.7697,589,2018,2022,1851
-neOAES,"Marvin Klemme Range Research Station NEON",OK,-99.0588,35.4106,519,2018,2022,1851
-neONAQ,"Onaqui NEON",UT,-112.4525,40.1776,1662,2018,2022,1851
-neORNL,"Oak Ridge NEON",TN,-84.2826,35.9641,344,2018,2022,1851
-neOSBS,"Ordway-Swisher Biological Station NEON",FL,-81.9934,29.6893,46,2018,2022,1851
-nePUUM,"Pu'u Maka'ala Natural Area Reserve NEON",HI,-155.3173,19.5531,1685,2018,2022,1851
-neRMNP,"Rocky Mountains NEON",CO,-105.5460,40.2759,2742,2018,2022,1851
-neSCBI,"Smithsonian Conservation Biology Institute NEON",VA,-78.1395,38.8929,352,2018,2022,1851
-neSERC,"Smithsonian Environmental Research Center NEON",MD,-76.5600,38.8901,33,2018,2022,1851
-neSJER,"San Joaquin Experimental Range NEON",CA,-119.7323,37.1088,400,2018,2022,1851
-neSOAP,"Soaproot Saddle NEON",CA,-119.2622,37.0334,1210,2018,2022,1851
-neSRER,"Santa Rita Experimental Range NEON",AZ,-110.8355,31.9107,997,2018,2022,1851
-neSTEI,"Steigerwaldt-Chequamegon NEON",WI,-89.5864,45.5089,476,2018,2022,1851
-neSTER,"North Sterling NEON",CO,-103.0293,40.4619,1365,2018,2022,1851
-neTALL,"Talladega National Forest NEON",AL,-87.3933,32.9505,166,2018,2022,1851
-neTEAK,"Lower Teakettle NEON",CA,-119.0060,37.0058,2149,2018,2022,1851
-neTOOL,"Toolik Field Station NEON",AK,-149.3705,68.6611,832,2018,2022,1851
-neTREE,"Treehaven NEON",WI,-89.5857,45.4937,467,2018,2022,1851
-neUKFS,"University of Kansas Field Station NEON",KS,-95.1922,39.0404,322,2018,2022,1851
-neUNDE,"University of Notre Dame Environmental Research Center NEON",MI,-89.5373,46.2339,521,2018,2022,1851
-neWOOD,"Chase Lake National Wildlife Refuge NEON",ND,-99.2413,47.1282,591,2018,2022,1851
-neWREF,"Wind River Experimental Forest NEON",WA,-121.9519,45.8205,351,2018,2022,1851
-neYELL,"Yellowstone National Park NEON",WY,-110.5391,44.9535,2133,2018,2022,1851
+site_code,name,state,lon,lat,elev,startyear,endyear,alignyear
+US-xAB,"Abby Road NEON",WA,-122.3303,45.7624,365,2018,2022,1851
+US-xBA,"Utqiaġvik NEON",AK,-156.6194,71.2824,4,2018,2022,1851
+US-xBR,"Bartlett Experimental Forest NEON",NH,-71.2874,44.0639,274,2018,2022,1851
+US-xBL,"Blandy Experimental Farm NEON",VA,-78.0418,39.0337,183,2018,2022,1851
+US-xBN,"Caribou-Poker Creeks Research Watershed NEON",AK,-147.5026,65.154,230,2018,2022,1851
+US-xCL,"Lyndon B. Johnson National Grassland NEON",TX,-97.57,33.4012,272,2018,2022,1851
+US-xCP,"Central Plains Experimental Range NEON",CO,-104.7456,40.8155,1654,2018,2022,1851
+US-xDC,"Dakota Coteau Field Site NEON",ND,-99.1066,47.1617,575,2018,2022,1851
+US-xDJ,"Delta Junction NEON",AK,-145.7514,63.8811,517,2018,2022,1851
+US-xDL,"Dead Lake NEON",AL,-87.8039,32.5417,25,2018,2022,1851
+US-xDS,"Disney Wilderness Preserve NEON",FL,-81.4362,28.1251,20,2018,2022,1851
+US-xGR,"Great Smoky Mountains National Park NEON",TN,-83.502,35.689,575,2018,2022,1851
+PR-xGU,"Guanica Forest NEON",PR,-66.8687,17.9696,125,2018,2022,1851
+US-xHA,"Harvard Forest & Quabbin Watershed NEON",MA,-72.1727,42.5369,348,2018,2022,1851
+US-xHL,"Healy NEON",AK,-149.2134,63.8758,677,2018,2022,1851
+US-xJE,"The Jones Center At Ichauway NEON",GA,-84.4686,31.1948,47,2018,2022,1851
+US-xJR,"Jornada Experimental Range NEON",NM,-106.8425,32.5907,1324,2018,2022,1851
+US-xKA,"Konza Prairie Agroecosystem NEON",KS,-96.6129,39.1104,323,2018,2022,1851
+US-xKZ,"Konza Prairie Biological Station NEON",KS,-96.5631,39.1008,414,2018,2022,1851
+PR-xLA,"Lajas Experimental Station NEON",PR,-67.0769,18.0213,16,2018,2022,1851
+US-xLE,"Lenoir Landing NEON",AL,-88.1612,31.8539,13,2018,2022,1851
+US-xML,"Mountain Lake Biological Station NEON",VA,-80.5248,37.3783,1170,2018,2022,1851
+US-xMB,"Moab NEON",UT,-109.3883,38.2483,1799,2018,2022,1851
+US-xNW,"Niwot Ridge NEON",CO,-105.5824,40.0543,3490,2018,2022,1851
+US-xNG,"Northern Great Plains Research Laboratory NEON",ND,-100.9154,46.7697,589,2018,2022,1851
+US-xAE,"Marvin Klemme Range Research Station NEON",OK,-99.0588,35.4106,519,2018,2022,1851
+US-xNQ,"Onaqui NEON",UT,-112.4525,40.1776,1662,2018,2022,1851
+US-xRN,"Oak Ridge NEON",TN,-84.2826,35.9641,344,2018,2022,1851
+US-xSB,"Ordway-Swisher Biological Station NEON",FL,-81.9934,29.6893,46,2018,2022,1851
+US-xPU,"Pu'u Maka'ala Natural Area Reserve NEON",HI,-155.3173,19.5531,1685,2018,2022,1851
+US-xRM,"Rocky Mountains NEON",CO,-105.546,40.2759,2742,2018,2022,1851
+US-xSC,"Smithsonian Conservation Biology Institute NEON",VA,-78.1395,38.8929,352,2018,2022,1851
+US-xSE,"Smithsonian Environmental Research Center NEON",MD,-76.56,38.8901,33,2018,2022,1851
+US-xSJ,"San Joaquin Experimental Range NEON",CA,-119.7323,37.1088,400,2018,2022,1851
+US-xSP,"Soaproot Saddle NEON",CA,-119.2622,37.0334,1210,2018,2022,1851
+US-xSR,"Santa Rita Experimental Range NEON",AZ,-110.8355,31.9107,997,2018,2022,1851
+US-xST,"Steigerwaldt-Chequamegon NEON",WI,-89.5864,45.5089,476,2018,2022,1851
+US-xSL,"North Sterling NEON",CO,-103.0293,40.4619,1365,2018,2022,1851
+US-xTA,"Talladega National Forest NEON",AL,-87.3933,32.9505,166,2018,2022,1851
+US-xTE,"Lower Teakettle NEON",CA,-119.006,37.0058,2149,2018,2022,1851
+US-xTL,"Toolik Field Station NEON",AK,-149.3705,68.6611,832,2018,2022,1851
+US-xTR,"Treehaven NEON",WI,-89.5857,45.4937,467,2018,2022,1851
+US-xUK,"University of Kansas Field Station NEON",KS,-95.1922,39.0404,322,2018,2022,1851
+US-xUN,"University of Notre Dame Environmental Research Center NEON",MI,-89.5373,46.2339,521,2018,2022,1851
+US-xWD,"Woodworth NEON",ND,-99.2413,47.1282,591,2018,2022,1851
+US-xWR,"Wind River Experimental Forest NEON",WA,-121.9519,45.8205,351,2018,2022,1851
+US-xYE,"Yellowstone National Park NEON",WY,-110.5391,44.9535,2133,2018,2022,1851
