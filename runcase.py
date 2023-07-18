@@ -145,6 +145,10 @@ parser.add_option("--livneh", dest="livneh", default=False, \
                   action="store_true", help = "Livneh correction to CRU precip (CONUS only)")
 parser.add_option("--daymet", dest="daymet", default=False, \
                   action="store_true", help = "Daymet correction to GSWP3 precip (CONUS only)")
+parser.add_option("--era5", dest="era5", default=False, \
+                  action="store_true", help = 'Use ERA5 atmospheric reanalysis')
+parser.add_option("--era5_land", dest="era5_land", default=False, \
+                  action="store_true", help ="Use ERA5-Land reanalysis data")
 parser.add_option("--monthly_metdata", dest="monthly_metdata", default = '', \
                   help = "File containing met data (cpl_bypass only)")
 parser.add_option("--add_temperature", dest="addt", default=0.0, \
