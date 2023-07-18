@@ -339,6 +339,8 @@ elif ('anvil' in options.machine or 'chrysalis' in options.machine):
     ccsm_input = '/home/ccsm-data/inputdata'
 elif ('compy' in options.machine):
     ccsm_input = '/compyfs/inputdata/'
+elif ('lanl-ees' in options.machine):
+    ccsm_input = '/project/neon_e3sm/inputdata'
 
 #if (options.compiler != ''):
 #    if (options.machine == 'titan'):
@@ -391,6 +393,8 @@ if (options.runroot == '' or (os.path.exists(options.runroot) == False)):
     elif ('compy' in options.machine):
         runroot='/compyfs/'+myuser+'/e3sm_scratch'
         myproject='e3sm'
+    elif ('lanl-ees' in options.machine):
+        runroot='/project/'+myuser+'/e3sm_scratch'
     else:
         runroot = csmdir+'/run'
 else:
@@ -495,6 +499,8 @@ for row in AFdatareader:
                 options.princeton or options.cruncepv8 or options.gswp3_w5e5)):
                 print(endyear_trans, site_endyear)
                 translen = min(site_endyear,endyear_trans)-1850+1
+            if (options.era5 or options.era5_land):
+
 
         fsplen = int(ny_fin)
  
@@ -593,6 +599,10 @@ for row in AFdatareader:
         if (options.daymet4): # gswp3 v2 spatially-downscaled by daymet v4, usually together with user-defined domain and surface data
             basecmd = basecmd+' --daymet4'
             if (not options.gswp3): basecmd = basecmd+' --gswp3'
+        if (options.era5):
+            basecmd = basecmd+' --era5'
+        if (options.era5_land):
+            basecmd = basecmd+' --era5_land'
         if (options.fates_paramfile != ''):
             basecmd = basecmd+ ' --fates_paramfile '+options.fates_paramfile
         if (options.fates_nutrient != ''):
