@@ -115,6 +115,10 @@ parser.add_option("--gswp3_w5e5", dest="gswp3_w5e5", default=False, action="stor
                   help = 'Use GSWP3 meteorology')
 parser.add_option("--princeton", dest="princeton", default=False, action="store_true", \
                   help = 'Use Princeton meteorology')
+parser.add_option("--era5", dest="era5", default=False, action="store_true", \
+                  help = 'Use ERA5 reanalysis')
+parser.add_option("--era5_land", dest="era5_land", default=False, action="store_true", \
+                  help = 'Use ERA5-Land reanalysis')
 parser.add_option("--co2_file", dest="co2_file", default="fco2_datm_rcp4.5_1765-2500_c130312.nc", \
                   help = 'co2 data filename')
 parser.add_option("--eco2_file", dest="eco2_file", default="", \
