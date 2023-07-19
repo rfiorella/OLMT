@@ -407,6 +407,8 @@ elif ('pm-cpu' in options.machine):
     ppn=128
 elif ('docker' in options.machine):
     ppn=4
+elif ('lanl-ees' in options.machine):
+    ppn=32 # could probably choose more, but this seems a safe option.
 if (options.ensemble_file == ''):
   ppn=min(ppn, int(options.np))
 
@@ -587,7 +589,8 @@ if (options.metdir!='none'):# obviously user-provided met forcing is not reanaly
     use_reanalysis = False
 #CRU-NCEP 2 transient phases
 elif ('CRU' in compset or options.cruncep or options.gswp3 or options.gswp3_w5e5 or \
-            options.crujra or options.cruncepv8 or options.princeton or options.cplhist):
+            options.crujra or options.cruncepv8 or options.princeton or options.cplhist or \
+            options.era5 or options.era5_land):
     use_reanalysis = True
 else:
     use_reanalysis = False
