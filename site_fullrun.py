@@ -499,7 +499,7 @@ for row in AFdatareader:
                 options.princeton or options.cruncepv8 or options.gswp3_w5e5)):
                 print(endyear_trans, site_endyear)
                 translen = min(site_endyear,endyear_trans)-1850+1
-            if (options.era5 or options.era5_land):
+            #if (options.era5 or options.era5_land):
 
 
         fsplen = int(ny_fin)
