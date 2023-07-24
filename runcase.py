@@ -1784,7 +1784,7 @@ if (not cpl_bypass and not isglobal):
         myinput.close()
         myoutput.close()
     # run preview_namelists to copy user_datm.streams.... to CaseDocs
-    os.system(os.path.abspath(options.csmdir)+'/cime/scripts/Tools/preview_namelists')
+    os.system(os.path.abspath(options.csmdir)+'/cime/CIME/Tools/preview_namelists')
 
 
 #copy site data to run directory
@@ -1971,7 +1971,8 @@ if ((options.ensemble_file != '' or int(options.mc_ensemble) != -1) and (options
         cnp = 'True'
         if (options.cn_only or options.c_only):
             cnp= 'False'
-        if ('docker' in options.machine or 'oic' in options.machine or 'cades' in options.machine or 'ubuntu' in options.machine):
+        if ('docker' in options.machine or 'oic' in options.machine or 'cades' in options.machine or 'ubuntu' in options.machine or
+            'lanl-ees' in options.machine):
             mpicmd = 'mpirun'
             if ('cades' in options.machine):
                 mpicmd = '/software/dev_tools/swtree/cs400_centos7.2_pe2016-08/openmpi/1.10.3/centos7.2_gnu5.3.0/bin/mpirun'
