@@ -394,7 +394,7 @@ if (options.runroot == '' or (os.path.exists(options.runroot) == False)):
         runroot='/compyfs/'+myuser+'/e3sm_scratch'
         myproject='e3sm'
     elif ('lanl-ees' in options.machine):
-        runroot='/project/'+myuser+'/e3sm_scratch'
+        runroot='/project/ngee3/'+myuser+'/e3sm_scratch'
     else:
         runroot = csmdir+'/run'
 else:
@@ -1092,6 +1092,8 @@ for row in AFdatareader:
                 mysubmit_type = ''
             if ('docker' in options.machine):
                 mysubmit_type = ''
+            if ('lanl-ees' in options.machine):
+            	mysubmit_type = ''
             if ((sitenum % npernode) == 0):
                 mycase_firstsite = ad_case_firstsite
                 if (options.noad):
@@ -1185,6 +1187,16 @@ for row in AFdatareader:
                     output.write('source $MODULESHOME/init/bash\n')
                     output.write('module unload python\n')
                     output.write('module load python/2.7.12\n')
+                if ('lanl-ees' in options.machine):
+                	output.write('module purge')
+                	output.write('module load anaconda-python/3.8')
+                	output.write('module load gcc/9.4.0')
+                	output.write('module load openmpi/3.1.6/gcc-9.3.0')
+                	output.write('module load cmake')
+                	output.write('module load hdf5/1.14.1-2')
+                	output.write('module load pnetcdf/1.12.3/openmpi3.1.6-gcc9.3.0')
+                	output.write('module load netcdf-c/4.9.2/openmpi3.1.6-gcc9.3.0')
+                	output.write('module load netcdf-fortram/4.6.0/openmpi3.1.6-gcc9.3.0')
             else:
                 output = open('./scripts/'+myscriptsdir+'/'+c+'_group'+str(groupnum)+'.pbs','a')   
                
