@@ -1203,11 +1203,7 @@ for row in AFdatareader:
                     output.write('source $MODULESHOME/init/bash\n')
                     output.write('module unload python\n')
                     output.write('module load python/2.7.12\n')
-<<<<<<< HEAD
 #                if ('ees' in options.machine):
-=======
-#                if ('lanl-ees' in options.machine):
->>>>>>> 751a731 (more machine updates for ees servers)
 #                    output.write('source $MODULESHOME/init/bash\n')
 #                    output.write('module purge\n')
 #                    output.write('module load anaconda-python/3.8\n')
