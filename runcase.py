@@ -1107,7 +1107,7 @@ if ('20TR' in compset or options.istrans):
         os.system('./xmlchange RUN_STARTDATE=1850-01-01')
     
 #No pnetcdf for small cases on compy
-if (('docker' in options.machine or 'compy' in options.machine) and int(options.np) < 80):
+if (('docker' in options.machine or 'compy' in options.machine or 'lanl-ees' in options.machine) and int(options.np) < 80):
   os.system('./xmlchange PIO_TYPENAME=netcdf')
 
 comps = ['ATM','LND','ICE','OCN','CPL','GLC','ROF','WAV','ESP','IAC']
