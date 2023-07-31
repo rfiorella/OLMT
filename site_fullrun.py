@@ -1184,17 +1184,17 @@ for row in AFdatareader:
                     output.write('source $MODULESHOME/init/bash\n')
                     output.write('module unload python\n')
                     output.write('module load python/2.7.12\n')
-                if ('lanl-ees' in options.machine):
-                    output.write('source $MODULESHOME/init/bash\n')
-                    output.write('module purge\n')
-                    output.write('module load anaconda-python/3.8\n')
-                    output.write('module load gcc/9.4.0\n')
-                    output.write('module load openmpi/3.1.6/gcc-9.3.0\n')
-                    output.write('module load cmake\n')
-                    output.write('module load hdf5/1.14.1-2\n')
-                    output.write('module load pnetcdf/1.12.3/openmpi3.1.6-gcc9.3.0\n')
-                    output.write('module load netcdf-c/4.9.2/openmpi3.1.6-gcc9.3.0\n')
-                    output.write('module load netcdf-fortran/4.6.0/openmpi3.1.6-gcc9.3.0\n')
+#                if ('lanl-ees' in options.machine):
+#                    output.write('source $MODULESHOME/init/bash\n')
+#                    output.write('module purge\n')
+#                    output.write('module load anaconda-python/3.8\n')
+#                    output.write('module load gcc/9.4.0\n')
+#                    output.write('module load openmpi/3.1.6/gcc-9.3.0\n')
+#                    output.write('module load cmake\n')
+#                    output.write('module load hdf5/1.14.1-2\n')
+#                    output.write('module load pnetcdf/1.12.3/openmpi3.1.6-gcc9.3.0\n')
+#                    output.write('module load netcdf-c/4.9.2/openmpi3.1.6-gcc9.3.0\n')
+#                    output.write('module load netcdf-fortran/4.6.0/openmpi3.1.6-gcc9.3.0\n')
             else:
                 output = open('./scripts/'+myscriptsdir+'/'+c+'_group'+str(groupnum)+'.pbs','a')   
                
