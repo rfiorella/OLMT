@@ -681,7 +681,8 @@ if (options.dailyrunoff):
     cmd_trns = cmd_trns+' --dailyrunoff'
 
 #transient phase 2 (CRU-NCEP only, without coupler bypass)
-if ((options.cruncep or options.gswp3 or options.cruncepv8) and not options.cpl_bypass):
+if ((options.cruncep or options.gswp3 or options.cruncepv8) \
+        and not options.cpl_bypass and not options.notrans):
     basecase=basecase.replace('1850','20TR')+'_phase1'
     thistranslen = site_endyear - 1921 + 1
     cmd_trns2 = basecmd+' --trans2 --finidat_case '+basecase+ \
@@ -709,7 +710,7 @@ if (options.notrans == False):
     print('\nSetting up transient case\n')
     ierror = os.system(cmd_trns)
     if ierror != 0: sys.exit(-1)
-if ((options.cruncep or options.gswp3 or options.cruncepv8) and not options.cpl_bypass):
+if ((options.cruncep or options.gswp3 or options.cruncepv8) and not options.cpl_bypass and not options.notrans):
     print('\nSetting up transient case phase 2\n')
     ierror = os.system(cmd_trns2)
     if ierror != 0: sys.exit(-1)
