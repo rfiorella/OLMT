@@ -1566,7 +1566,7 @@ for i in range(1,int(options.ninst)+1):
         elif options.metdir != 'none':
             if (options.daymet4 and options.gswp3):
                 output.write(" metdata_type = 'gswp3_daymet4'\n")
-            else:
+            elif (options.gswp3):
                 output.write(" metdata_type = 'gswp3'\n") # This needs to be updated for other types
             output.write(" metdata_bypass = '%s'\n"%options.metdir)
             
@@ -1741,6 +1741,14 @@ if (not cpl_bypass):
                                    '"datm.streams.txt.CLMCRUNCEP.TPQW '+str(myalign_year)+ \
                                    ' '+str(startyear)+' '+str(endyear)+'  ", '+mypresaero+myco2+ \
                                    ', "datm.streams.txt.topo.observed 1 1 1"\n')
+            elif (options.gswp3): # default in elm seems to set myalign year for gswp3 to 12..?
+                myoutput.write(' streams = "datm.streams.txt.CLMGSWP3v1.Solar '+str(myalign_year)+ \
+                                   ' '+str(startyear)+' '+str(endyear)+'  ", '+ \
+                                   '"datm.streams.txt.CLMGSWP3v1.Precip '+str(myalign_year)+ \
+                                   ' '+str(startyear)+' '+str(endyear)+'  ", '+ \
+                                   '"datm.streams.txt.CLMGSWP3v1.TPQW '+str(myalign_year)+ \
+                                   ' '+str(startyear)+' '+str(endyear)+'  ", '+mypresaero+myco2+ \
+                                   ', "datm.streams.txt.topo.observed 1 1 1"\n') 
             else:
                 myoutput.write(' streams = "datm.streams.txt.CLM1PT.'+mylsm+'_USRDAT '+str(myalign_year)+ \
                                    ' '+str(startyear)+' '+str(endyear)+'  ", '+mypresaero+myco2+ \
