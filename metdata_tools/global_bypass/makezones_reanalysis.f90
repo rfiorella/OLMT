@@ -48,7 +48,6 @@ startyear = 1901
 endyear   = 2010
 res       = 3      !Timestep in hours
 
-
 data_ranges(1,1) =-0.04
 data_ranges(1,2) = 0.04   !Precip
 data_ranges(2,1) = -20.
@@ -138,7 +137,7 @@ do v=myid+1,7,np
          counti(3)  = ndaysm(m)*(24/res)
    
          ierr = nf90_get_var(ncid, varid, data_in(1:counti(1),1:counti(2),1:counti(3)), starti, counti)
-         print*, 'READ', ierr
+         print*, 'READ', ierr, ncid, varid
          ierr = nf90_close(ncid)
          do i=1,30 !720
             do j=1,360
@@ -175,6 +174,7 @@ do v=myid+1,7,np
                fname = trim(forcdir) // '/cpl_bypass/' // trim(myforcing) &
                       // '_' // trim(metvars) // '_' // startyrst // '-' // endyrst // '_z' // &
                     zst(3:4) // '.nc'
+               print*, "file name:", fname
                ierr = nf90_create(trim(fname),cmode=or(nf90_clobber,nf90_64bit_offset),ncid=ncid_out(z))
                ierr = nf90_def_dim(ncid_out(z), 'n', count_zone(z), dimid(2))
                ierr = nf90_def_dim(ncid_out(z), 'DTIME', (endyear-startyear+1)*(8760/res), dimid(1)) 
