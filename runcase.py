@@ -1769,7 +1769,6 @@ if (not cpl_bypass):
                                    ' '+str(startyear)+' '+str(endyear)+'  ", '+mypresaero+myco2+ \
                                    ', "datm.streams.txt.topo.observed 1 1 1"\n')
             elif (options.gswp3): # default in elm seems to set myalign year for gswp3 to 12..?
-                print(str(myalign_year))
                 myoutput.write(' streams = "datm.streams.txt.CLMGSWP3v1.Solar '+str(myalign_year)+ \
                                    ' '+str(startyear)+' '+str(endyear)+'  ", '+ \
                                    '"datm.streams.txt.CLMGSWP3v1.Precip '+str(myalign_year)+ \
