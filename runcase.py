@@ -341,10 +341,19 @@ parser.add_option("--var_list_pft", dest="var_list_pft", default="",help='Comma-
 (options, args) = parser.parse_args()
 
 #Add topounits:
-parser.add_option("--topounits", dest="topounits", default=False,
-                  help="Turn on topounits > 1", action='store_true')
-parser.add_option("--topounits_atmdownscale", dest = "topounits_atmdownscale", default=False,
-                  help="Use atmospheric downscaling in topounits", action='store_true')
+parser.add_option("--topounits", dest="topounits", \
+                  help="Turn on topounits > 1", action='store_false')
+parser.add_option("--topounits_atmdownscale", dest = "topounits_atmdownscale", \
+                  help="Use atmospheric downscaling in topounits", action='store_false')
+parser.add_option("--topounits_raddownscale", dest = "topounits_raddownscale", \ 
+                  help="Downscale radiation input to topounits", action = "store_false")
+# snow options:
+parser.add_option("--dust_snow_mixing", dest="dust_snow_mixing", \
+                  help = "Use Hao et al. dust/snow mixing albedo parameterization", action="store_false")
+parser.add_option("--no_snicar_ad", dest="no_snicar_ad", \
+                  help = "Turn off SNICAR-AD snow microphysics model", action = "store_false")
+parser.add_option("--use_extra_snow_layers", dest = "use_extra_snow_layers", \
+                  help = "Turn on extra snow layers", action="store_false")
 
 #-------------------------------------------------------------------------------
 # If only make point(s) data, reset relevant options.
@@ -1082,6 +1091,7 @@ os.system('./xmlchange DOUT_S=FALSE')
 #datm options
 if (not cpl_bypass):
     if (use_reanalysis):
+        if (option.)
         os.system('./xmlchange DATM_MODE=CLMCRUNCEP') 
     else:
         if (isglobal == False):
@@ -1405,12 +1415,21 @@ for i in range(1,int(options.ninst)+1):
         output.write(" use_var_soil_thick = .TRUE.\n")
     if (options.topounits):
         output.write(" fsurdat = '/project/neon_e3sm/inputdata/lnd/clm2/surfdata/half_degree_merge_surfdata_0.5x0.5_simyr2000_c190418.with_aveDTB.20201222.nc'\n")
-        if (option.topounits_atmdownscale):
+        if (options.topounits_atmdownscale):
             output.write(" use_atm_downscaling_to_topunit = .true.\n")
-        else:
+        else: # needed? maybe not.
             output.write(" use_atm_downscaling_to_topunit = .false.\n")
+        if (options.topounits_raddownscale):
+            output.write(" use_top_solar_rad = .true.\n")
     if (options.no_budgets):
         output.write(" do_budgets = .false.\n")
+    # snow options
+    if (options.dust_snow_mixing):
+        output.write(" use_top_solar_rad = .true.\n")
+    if (options.no_snicar_ad):
+        output.write(" use_snicar_ad = .false.\n")
+    if (options.use_extra_snow_layers):
+        output.write(" use_extra_snow_layers = .true.\n")
 
     #pft dynamics file for transient run
     if ('20TR' in compset or options.istrans):
