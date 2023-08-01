@@ -240,6 +240,15 @@ parser.add_option("--maxpatch_pft", dest="maxpatch_pft", default=17, \
 parser.add_option("--landusefile", dest="pftdynfile", default='', \
                   help='user-defined dynamic PFT file')
 
+#snow options
+parser.add_option("--dust_snow_mixing", dest="dust_snow_mixing", \
+                  help = "Use Hao et al. dust/snow mixing albedo parameterization", action="store_false")
+parser.add_option("--no_snicar_ad", dest="no_snicar_ad", \
+                  help = "Turn off SNICAR-AD snow microphysics model", action = "store_false")
+parser.add_option("--use_extra_snow_layers", dest = "use_extra_snow_layers", \
+                  help = "Turn on extra snow layers", action="store_false")
+
+
 parser.add_option("--var_list_pft", dest="var_list_pft", default="",help='Comma-separated list of vars to output at PFT level')
 parser.add_option("--dryrun",dest="dryrun",default=False,action="store_true",help="Do not execute commands")
 (options, args) = parser.parse_args()
@@ -665,7 +674,14 @@ for row in AFdatareader:
           basecmd = basecmd+' --project '+myproject
         if (options.domainfile != ''):
           basecmd = basecmd+' --domainfile '+options.domainfile 
-
+        # snow opts
+        if (options.dust_snow_mixing):
+            basecmd = basecmd + ' --dust_snow_mixing'
+        if (options.use_extra_snow_layers):
+            basecmd = basecmd + ' --use_extra_snow_layers'
+        if (options.no_snicar_ad):
+            basecmd = basecmd + ' --no_snicar_ad'
+       
 #---------------- build commands for runcase.py -----------------------------
 
         # define compsets
