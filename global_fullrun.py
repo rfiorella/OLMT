@@ -444,6 +444,7 @@ fsplen = int(ny_fin)
 #    fsplen = site_endyear-startyear+1
  
 #get align_year
+print(endyear)
 year_align = (endyear-1850+1) % ncycle
 
 #get regional information
@@ -860,12 +861,12 @@ if (options.mc_ensemble <= 0):
 
         
         output.write("cd "+caseroot+'/'+c+"/\n")
-        output.write("./xmlchange --id STOP_N -val "+str(this_run_n)+'\n')
+        output.write("./xmlchange --id STOP_N --val "+str(this_run_n)+'\n')
         if (options.cplhist):
-          output.write("./xmlchange --id REST_N -val 25\n")
+          output.write("./xmlchange --id REST_N --val 25\n")
         else:
-          output.write("./xmlchange --id REST_N -val 20\n")   #Restart every 20 years in global mode
-        output.write("./xmlchange --id RUN_STARTDATE -val "+(str(10000+model_startdate))[1:]+ \
+          output.write("./xmlchange --id REST_N --val 20\n")   #Restart every 20 years in global mode
+        output.write("./xmlchange --id RUN_STARTDATE --val "+(str(10000+model_startdate))[1:]+ \
                          '-01-01\n')                           
         if (n > 0):
             #change finidat 
