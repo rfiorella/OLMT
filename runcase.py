@@ -336,23 +336,23 @@ parser.add_option("--maxpatch_pft", dest="maxpatch_pft", default=17, \
 parser.add_option("--landusefile", dest="pftdynfile", default='', \
                   help='user-defined dynamic PFT file')
 parser.add_option("--var_list_pft", dest="var_list_pft", default="",help='Comma-separated list of vars to output at PFT level')
-(options, args) = parser.parse_args()
 
 #Add topounits:
 parser.add_option("--topounits", dest="topounits", \
                   help="Turn on topounits > 1", action='store_false')
 parser.add_option("--topounits_atmdownscale", dest = "topounits_atmdownscale", \
                   help="Use atmospheric downscaling in topounits", action='store_false')
-parser.add_option("--topounits_raddownscale", dest = "topounits_raddownscale", \ 
+parser.add_option("--topounits_raddownscale", dest = "topounits_raddownscale", \
                   help="Downscale radiation input to topounits", action = "store_false")
 # snow options:
-parser.add_option("--dust_snow_mixing", dest="dust_snow_mixing", \
+parser.add_option("--dust_snow_mixing", dest="dust_snow_mixing", default=False, \
                   help = "Use Hao et al. dust/snow mixing albedo parameterization", action="store_false")
 parser.add_option("--no_snicar_ad", dest="no_snicar_ad", \
                   help = "Turn off SNICAR-AD snow microphysics model", action = "store_false")
 parser.add_option("--use_extra_snow_layers", dest = "use_extra_snow_layers", \
                   help = "Turn on extra snow layers", action="store_false")
 
+(options, args) = parser.parse_args()
 #-------------------------------------------------------------------------------
 # If only make point(s) data, reset relevant options.
 if (options.makepointdata_only):
@@ -1089,8 +1089,10 @@ os.system('./xmlchange DOUT_S=FALSE')
 #datm options
 if (not cpl_bypass):
     if (use_reanalysis):
-        if (option.)
-        os.system('./xmlchange DATM_MODE=CLMCRUNCEP') 
+        if (options.cruncep):
+          os.system('./xmlchange DATM_MODE=CLMCRUNCEP')
+        if (options.gswp3):
+          os.system('./xmlchange DATM_MODE=CLMGSWP3v1')
     else:
         if (isglobal == False):
             os.system('./xmlchange DATM_MODE=CLM1PT') 
@@ -1141,6 +1143,11 @@ if (int(options.ninst) > 1):
     os.system('./xmlchange NTASKS_LND='+options.ninst)
 
 os.system('./xmlchange STOP_OPTION='+options.run_units)
+print('*******************************')
+print('*******************************')
+print('setting STOP_N to:'+str(options.run_n))
+print('*******************************')
+print('*******************************')
 os.system('./xmlchange STOP_N='+str(options.run_n))
 
 if (options.rest_n > 0):
@@ -1411,14 +1418,14 @@ for i in range(1,int(options.ninst)+1):
     
     if (options.var_soilthickness):
         output.write(" use_var_soil_thick = .TRUE.\n")
-    if (options.topounits):
-        output.write(" fsurdat = '/project/neon_e3sm/inputdata/lnd/clm2/surfdata/half_degree_merge_surfdata_0.5x0.5_simyr2000_c190418.with_aveDTB.20201222.nc'\n")
-        if (options.topounits_atmdownscale):
-            output.write(" use_atm_downscaling_to_topunit = .true.\n")
-        else: # needed? maybe not.
-            output.write(" use_atm_downscaling_to_topunit = .false.\n")
-        if (options.topounits_raddownscale):
-            output.write(" use_top_solar_rad = .true.\n")
+#    if (options.topounits):
+#        output.write(" fsurdat = '/project/neon_e3sm/inputdata/lnd/clm2/surfdata/half_degree_merge_surfdata_0.5x0.5_simyr2000_c190418.with_aveDTB.20201222.nc'\n")
+#        if (options.topounits_atmdownscale):
+#            output.write(" use_atm_downscaling_to_topunit = .true.\n")
+#        else: # needed? maybe not.
+#            output.write(" use_atm_downscaling_to_topunit = .false.\n")
+#        if (options.topounits_raddownscale):
+#            output.write(" use_top_solar_rad = .true.\n")
     if (options.no_budgets):
         output.write(" do_budgets = .false.\n")
     # snow options
@@ -1554,8 +1561,8 @@ for i in range(1,int(options.ninst)+1):
                 else:
                     output.write(" metdata_type = 'gswp3'\n")
                     output.write(" metdata_bypass = '"+options.ccsm_input+"/atm/datm7/" \
-                          +"/atm_forcing.datm7.GSWP3.0.5d.v2.c180716/cpl_bypass_full'\n")
-#                         +"atm_forcing.datm7.GSWP3.0.5d.v1.c170516/cpl_bypass_full'\n")
+#                        +"/atm_forcing.datm7.GSWP3.0.5d.v2.c180716/cpl_bypass_full'\n")
+                         +"atm_forcing.datm7.GSWP3.0.5d.v1.c170516/cpl_bypass_full'\n")
             elif (options.gswp3_w5e5):
                 output.write(" metdata_type = 'gswp3_w5e5'\n")
                 output.write(" metdata_bypass = '"+options.ccsm_input+"/atm/datm7/" \
@@ -1737,8 +1744,10 @@ if (not cpl_bypass):
     for s in myinput:
         if ('streams =' in s):
             myalign_year = 1 #startyear
-            if (options.align_year != -999):
-                myalign_year = options.align_year
+            #if (options.align_year != -999):
+            #    print(options.align_year)
+            #    myalign_year = options.align_year
+            #    print(myalign_year+" <- why are you 12? you should be 1")
             if (options.istrans or '20TR' in compset):
                 mypresaero = '"datm.streams.txt.presaero.trans_1850-2000 1850 1850 2000"'
                 myco2      = ', "datm.streams.txt.co2tseries.20tr 1766 1766 2010"'
@@ -1757,6 +1766,7 @@ if (not cpl_bypass):
                                    ' '+str(startyear)+' '+str(endyear)+'  ", '+mypresaero+myco2+ \
                                    ', "datm.streams.txt.topo.observed 1 1 1"\n')
             elif (options.gswp3): # default in elm seems to set myalign year for gswp3 to 12..?
+                print(str(myalign_year))
                 myoutput.write(' streams = "datm.streams.txt.CLMGSWP3v1.Solar '+str(myalign_year)+ \
                                    ' '+str(startyear)+' '+str(endyear)+'  ", '+ \
                                    '"datm.streams.txt.CLMGSWP3v1.Precip '+str(myalign_year)+ \
@@ -1771,7 +1781,7 @@ if (not cpl_bypass):
         elif ('streams' in s):
             continue  #do nothing
         elif ('taxmode' in s):
-            if (options.cruncep or options.cruncepv8):
+            if (options.cruncep or options.cruncepv8 or options.gswp3):
                 taxst = "taxmode = 'cycle', 'cycle', 'cycle', 'extend', 'extend'"
             else:
                 taxst = "taxmode = 'cycle', 'extend', 'extend'"
