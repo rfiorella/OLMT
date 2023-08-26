@@ -16,6 +16,7 @@ ENV USER=modeluser
 #    && useradd -ms /bin/bash $USER -u 1001 -g dockerusers \
 #    && chown $USER:dockerusers /home/$USER
 
+USER root
 ## create data mount point in container
 ## could change this to /mnt or something more generic in machines files
 RUN cd / \
