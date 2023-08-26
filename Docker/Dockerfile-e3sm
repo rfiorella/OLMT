@@ -3,7 +3,7 @@
 # E3SM/ELM land model docker container
 # ----------------------------------------------------------------------
 
-FROM rfiorella/debian11-gcc94-opmi412
+FROM rfiorella/debian11-gcc94-ompi412
 
 # where to get the ELM source code
 ENV REPOSITORY_URL=https://github.com/FASSt-simulation/simulation_containers
