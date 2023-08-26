@@ -16,29 +16,29 @@ ENV USER=modeluser
 #    && useradd -ms /bin/bash $USER -u 1001 -g dockerusers \
 #    && chown $USER:dockerusers /home/$USER
 
-USER root
+#USER root
 ## create data mount point in container
 ## could change this to /mnt or something more generic in machines files
-RUN cd / \
-    && mkdir -p inputdata \
-    && mkdir -p example_inputs \
-    && mkdir -p output \
-    && mkdir -p scripts \
-    && mkdir -p tools \
-    && mkdir -p tools/cprnc \
-    && mkdir -p baselines \
-    && mkdir -p .cime \
-    && mkdir -p home/$USER/.cime \
-    && chown $USER inputdata \
-    && chown $USER example_inputs \
-    && chown $USER output \
-    && chown $USER scripts \
-    && chown $USER tools \
-    && chown $USER tools/cprnc \
-    && chown $USER baselines \
-    && chown $USER .cime \
-    && chown $USER /home/$USER/.cime \
-    && cd /
+#RUN cd / \
+#    && mkdir -p inputdata \
+#    && mkdir -p example_inputs \
+#    && mkdir -p output \
+#    && mkdir -p scripts \
+#    && mkdir -p tools \
+#    && mkdir -p tools/cprnc \
+#    && mkdir -p baselines \
+#    && mkdir -p .cime \
+#    && mkdir -p home/$USER/.cime \
+#    && chown $USER inputdata \
+#    && chown $USER example_inputs \
+#    && chown $USER output \
+#    && chown $USER scripts \
+#    && chown $USER tools \
+#    && chown $USER tools/cprnc \
+#    && chown $USER baselines \
+#    && chown $USER .cime \
+#    && chown $USER /home/$USER/.cime \
+#    && cd /
 
 ## Checkout ELM model
 RUN wget $REPOSITORY_URL/raw/main/docker/elm/elm_v2-for-ngee/e3sm_source/e3sm_v2.0.0_ngee.tar.gz \
