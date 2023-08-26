@@ -351,6 +351,9 @@ parser.add_option("--no_snicar_ad", dest="no_snicar_ad", \
                   help = "Turn off SNICAR-AD snow microphysics model", action = "store_false")
 parser.add_option("--use_extra_snow_layers", dest = "use_extra_snow_layers", \
                   help = "Turn on extra snow layers", action="store_false")
+#CI testing:
+parser.add_option("--test", dest = "test_mode", default=False
+                  help = "Run in test mode? (5 day simulation)", action = "store_false")
 
 (options, args) = parser.parse_args()
 #-------------------------------------------------------------------------------
@@ -1142,13 +1145,13 @@ if (int(options.ninst) > 1):
     os.system('./xmlchange NINST_LND='+options.ninst)
     os.system('./xmlchange NTASKS_LND='+options.ninst)
 
-os.system('./xmlchange STOP_OPTION='+options.run_units)
-print('*******************************')
-print('*******************************')
-print('setting STOP_N to:'+str(options.run_n))
-print('*******************************')
-print('*******************************')
-os.system('./xmlchange STOP_N='+str(options.run_n))
+if (options.test_mode):
+    os.system('./xmlchange STOP_OPTION=ndays')
+    os.system('./xmlchange STOP_N=5')
+else:
+    os.system('./xmlchange STOP_OPTION='+options.run_units)
+    os.system('./xmlchange STOP_N='+str(options.run_n))
+
 
 if (options.rest_n > 0):
   print('Setting REST_N to '+str(options.rest_n))

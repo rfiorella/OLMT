@@ -3,14 +3,7 @@
 # E3SM/ELM land model docker container
 # ----------------------------------------------------------------------
 
-FROM fasstsimulation/baseos:gcc850ompi316_multiarch 
-LABEL maintainer.name="Shawn P. Serbin" \
-      maintainer.email="sserbin@bnl.gov" \
-      author.name="Shawn P. Serbin" \
-      author.email="sserbin@bnl.gov" \
-      description="ELM host land model" \
-      version.hlm="elm_v2-for-ngee" \
-      version.baseos="gcc8.5"
+FROM rfiorella/debian11-gcc94-opmi412
 
 # where to get the ELM source code
 ENV REPOSITORY_URL=https://github.com/FASSt-simulation/simulation_containers
@@ -88,25 +81,10 @@ RUN cd /E3SM/cime/scripts \
     && ./xmlchange DIN_LOC_ROOT=$PWD \
     && cd ${CASE_NAME} \
     && ./case.setup \
-    && ./case.build
+    && ./case.build \
+    && echo "*** ELM test build completed successfully ***"
 
-RUN echo "*** ELM test build completed successfully ***"
-
-## Remove test build
-#RUN cd / \
-#    && rm -rf /output/f19_g16.IGSWELMBGC
 ## ------------------------------------------------------------------------------
-
-## Install OLMT tool into the container to use with site or ensemble simulations
-# This uses the latest (bleeding edge) version of the Arctic-userpft branch of OLMT
-RUN cd /tools \
-    && git -c http.sslVerify=false clone -b Arctic-userpft --single-branch https://github.com/dmricciuto/OLMT.git \
-    && cd OLMT/ \
-    # add specific git commit as src - to try and stabilize changes and avoid new potential bugs
-    && git reset --hard 'c208528360d59f46630ef94fe4a3a42cbfd3acab' \
-    && chown $USER:dockerusers -R /tools/OLMT \
-    && chmod -R 777 /tools/OLMT
-
 # Copy scripts into /scripts to make availible to users
 # need to add the additional examples here prior to the workshop
 # including the usepft runscripts
