@@ -12,7 +12,7 @@ jobs:
 
     runs-on: ubuntu-latest
     container:
-      image: fasstsimulation/elm_v2-for-ngee_multiarch
+      image: serbinsh/ngeearctic_elm_containers:elm_v2-for-ngee_multiarch
       volumes:
         - elmdata:/inputdata
     steps:
