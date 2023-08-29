@@ -576,6 +576,8 @@ basecmd = basecmd+' --walltime '+str(options.walltime)
 basecmd = basecmd+' --lat_bounds '+str(lat_bounds[0])+','+str(lat_bounds[1])
 basecmd = basecmd+' --lon_bounds '+str(lon_bounds[0])+','+str(lon_bounds[1])
 
+print(basecmd)
+
 #----------------------- build commands for runCLM.py -----------------------------
 
 # define compsets
@@ -700,6 +702,8 @@ if (options.dailyvars):
     cmd_trns = cmd_trns + ' --dailyvars'        
 if (options.dailyrunoff):
     cmd_trns = cmd_trns+' --dailyrunoff'
+
+print(cmd_trns)
 
 #transient phase 2 (CRU-NCEP only, without coupler bypass)
 if ((options.cruncep or options.cruncepv8) \

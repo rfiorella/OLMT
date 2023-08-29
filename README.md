@@ -8,3 +8,8 @@ final spinup:  Final spinup to equilibrate carbon and nutrient pools
 transient:     1850-present day simulation with transient CO2, land use, climate, etc.
 
 This utility will automatically create surface and domain files using an existing global file at the specified resolution (default:  hcru_hcru).
+
+Updates for running on LANL systems - contact Rich Fiorella (rfiorella@lanl.gov)
+
+The following set of cases are currently supported:
+
