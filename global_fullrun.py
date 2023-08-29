@@ -578,19 +578,25 @@ basecmd = basecmd+' --lon_bounds '+str(lon_bounds[0])+','+str(lon_bounds[1])
 
 #----------------------- build commands for runCLM.py -----------------------------
 
+# define compsets
 #ECA or CTC
 if (options.cn_only):
     nutrients = 'CN'
 else:
     nutrients = 'CNP'
+
+# CENTURY or CTC
 if (options.centbgc):
     decomp_model = 'CNT'
 else:
     decomp_model = 'CTC'
+
+# ECA or RD
 if (options.eca):
     mymodel = nutrients+'ECA'+decomp_model
 else:
     mymodel = nutrients+'RD'+decomp_model
+#note - RD / ECA in FATES handled with namelist options, not compsets
 if (options.cpl_bypass):
     compset_type = 'ICB'
 else:
@@ -598,6 +604,7 @@ else:
 mymodel_fnsp = compset_type+'1850'+mymodel+'BC'
 mymodel_adsp = mymodel_fnsp.replace('CNP','CN')
 mymodel_trns = mymodel_fnsp.replace('1850','20TR')
+
 if (options.sp):
     mymodel_fnsp = compset_type+'ELMBC'
     options.noad = True

@@ -163,8 +163,6 @@ parser.add_option("--startdate_add_co2", dest="sd_addco2", default="99991231", \
                   help = 'Date (YYYYMMDD) to begin addding CO2')
 
 # surface data
-
-
 parser.add_option("--daymet4", dest="daymet4", default=False, \
                   action="store_true", help = "Daymet v4 downscaled GSWP3-v2 forcing with user-provided domain and surface data)")
 parser.add_option("--ad_spinup", action="store_true", \
