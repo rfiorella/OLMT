@@ -163,6 +163,8 @@ parser.add_option("--startdate_add_co2", dest="sd_addco2", default="99991231", \
                   help = 'Date (YYYYMMDD) to begin addding CO2')
 
 # surface data
+
+
 parser.add_option("--daymet4", dest="daymet4", default=False, \
                   action="store_true", help = "Daymet v4 downscaled GSWP3-v2 forcing with user-provided domain and surface data)")
 parser.add_option("--ad_spinup", action="store_true", \
@@ -350,7 +352,7 @@ parser.add_option("--no_snicar_ad", dest="no_snicar_ad", \
 parser.add_option("--use_extra_snow_layers", dest = "use_extra_snow_layers", \
                   help = "Turn on extra snow layers", action="store_false")
 #CI testing:
-parser.add_option("--test", dest = "test_mode", default=False,
+parser.add_option("--test", dest = "test_mode", default=False
                   help = "Run in test mode? (5 day simulation)", action = "store_false")
 
 (options, args) = parser.parse_args()
@@ -1150,7 +1152,6 @@ else:
     os.system('./xmlchange STOP_OPTION='+options.run_units)
     os.system('./xmlchange STOP_N='+str(options.run_n))
 
-
 if (options.rest_n > 0):
   print('Setting REST_N to '+str(options.rest_n))
   os.system('./xmlchange REST_N='+str(options.rest_n))
@@ -1591,8 +1592,11 @@ for i in range(1,int(options.ninst)+1):
                 output.write(" metdata_type = 'gswp3_daymet4'\n")
             elif (options.gswp3):
                 output.write(" metdata_type = 'gswp3'\n") # This needs to be updated for other types
+            elif (options.era5):
+                output.write(" metdata_type = 'era5'\n")
+            elif (options.era5_land):
+                output.write(" metdata_type = 'era5land'\n")
             output.write(" metdata_bypass = '%s'\n"%options.metdir)
-            
         # not reanalysis
         else:
             if (options.site_forcing == ''):
@@ -1767,6 +1771,7 @@ if (not cpl_bypass):
                                    ' '+str(startyear)+' '+str(endyear)+'  ", '+mypresaero+myco2+ \
                                    ', "datm.streams.txt.topo.observed 1 1 1"\n')
             elif (options.gswp3): # default in elm seems to set myalign year for gswp3 to 12..?
+                print(str(myalign_year))
                 myoutput.write(' streams = "datm.streams.txt.CLMGSWP3v1.Solar '+str(myalign_year)+ \
                                    ' '+str(startyear)+' '+str(endyear)+'  ", '+ \
                                    '"datm.streams.txt.CLMGSWP3v1.Precip '+str(myalign_year)+ \
