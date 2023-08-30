@@ -352,7 +352,7 @@ parser.add_option("--no_snicar_ad", dest="no_snicar_ad", \
 parser.add_option("--use_extra_snow_layers", dest = "use_extra_snow_layers", \
                   help = "Turn on extra snow layers", action="store_false")
 #CI testing:
-parser.add_option("--test", dest = "test_mode", default=False
+parser.add_option("--test", dest = "test_mode", default=False,
                   help = "Run in test mode? (5 day simulation)", action = "store_false")
 
 (options, args) = parser.parse_args()

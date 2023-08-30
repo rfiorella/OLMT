@@ -468,7 +468,8 @@ for row in AFdatareader:
             firstsite=site
         site_lat  = row[4]
         site_lon  = row[3]
-        if (options.cruncepv8 or options.cruncep or options.gswp3 or options.gswp3_w5e5 or options.princeton):
+        if (options.cruncepv8 or options.cruncep or options.gswp3 or \
+            options.gswp3_w5e5 or options.princeton or options.era5 or options.era5_land):
           startyear = 1901
           endyear = 1920
           if (options.cruncepv8):
@@ -479,6 +480,8 @@ for row in AFdatareader:
             endyear_trans=2019
           elif (options.princeton):
             endyear_trans=2012
+          elif (options.era5 or options.era5_land):
+            endyear_trans=2022
           else:
             endyear_trans=2010
         else:
@@ -1199,16 +1202,17 @@ for row in AFdatareader:
                     output.write('source $MODULESHOME/init/bash\n')
                     output.write('module unload python\n')
                     output.write('module load python/2.7.12\n')
-                if ('lanl-ees' in options.machine):
-                	output.write('module purge')
-                	output.write('module load anaconda-python/3.8')
-                	output.write('module load gcc/9.4.0')
-                	output.write('module load openmpi/3.1.6/gcc-9.3.0')
-                	output.write('module load cmake')
-                	output.write('module load hdf5/1.14.1-2')
-                	output.write('module load pnetcdf/1.12.3/openmpi3.1.6-gcc9.3.0')
-                	output.write('module load netcdf-c/4.9.2/openmpi3.1.6-gcc9.3.0')
-                	output.write('module load netcdf-fortram/4.6.0/openmpi3.1.6-gcc9.3.0')
+# RF - 230829 - doesn't work for some reason...
+#                if ('lanl-ees' in options.machine):
+#                    output.write('module purge')
+#                    output.write('module load anaconda-python/3.8')
+#                    output.write('module load gcc/9.4.0')
+#                    output.write('module load openmpi/3.1.6/gcc-9.3.0')
+#                    output.write('module load cmake')
+#                    output.write('module load hdf5/1.14.1-2')
+#                    output.write('module load pnetcdf/1.12.3/openmpi3.1.6-gcc9.3.0')
+#                    output.write('module load netcdf-c/4.9.2/openmpi3.1.6-gcc9.3.0')
+#                    output.write('module load netcdf-fortram/4.6.0/openmpi3.1.6-gcc9.3.0')
             else:
                 output = open('./scripts/'+myscriptsdir+'/'+c+'_group'+str(groupnum)+'.pbs','a')   
                
