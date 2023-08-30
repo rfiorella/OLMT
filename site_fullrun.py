@@ -507,10 +507,10 @@ for row in AFdatareader:
             if (options.eco2_file != ''):
                 translen = translen - ncycle     # if experiment sim, stop first transient at exp start yr - 1
             if (options.cpl_bypass and (options.cruncep or options.gswp3 or \
-                options.princeton or options.cruncepv8 or options.gswp3_w5e5)):
+                options.princeton or options.cruncepv8 or options.gswp3_w5e5 or \
+                options.era5 or options.era5_land)):
                 print(endyear_trans, site_endyear)
                 translen = min(site_endyear,endyear_trans)-1850+1
-            #if (options.era5 or options.era5_land):
 
 
         fsplen = int(ny_fin)
