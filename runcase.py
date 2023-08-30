@@ -1144,7 +1144,6 @@ if (int(options.ninst) > 1):
     os.system('./xmlchange NINST_LND='+options.ninst)
     os.system('./xmlchange NTASKS_LND='+options.ninst)
 
-<<<<<<< HEAD
 os.system('./xmlchange STOP_OPTION='+options.run_units)
 print('*******************************')
 print('*******************************')
@@ -1152,14 +1151,6 @@ print('setting STOP_N to:'+str(options.run_n))
 print('*******************************')
 print('*******************************')
 os.system('./xmlchange STOP_N='+str(options.run_n))
-=======
-if (options.test_mode):
-    os.system('./xmlchange STOP_OPTION=ndays')
-    os.system('./xmlchange STOP_N=5')
-else:
-    os.system('./xmlchange STOP_OPTION='+options.run_units)
-    os.system('./xmlchange STOP_N='+str(options.run_n))
->>>>>>> a8a0ce5 (wip - era5 updates)
 
 if (options.rest_n > 0):
   print('Setting REST_N to '+str(options.rest_n))

@@ -470,7 +470,8 @@ for row in AFdatareader:
             firstsite=site
         site_lat  = row[4]
         site_lon  = row[3]
-        if (options.cruncepv8 or options.cruncep or options.gswp3 or options.gswp3_w5e5 or options.princeton):
+        if (options.cruncepv8 or options.cruncep or options.gswp3 or \
+            options.gswp3_w5e5 or options.princeton or options.era5 or options.era5_land):
           startyear = 1901
           endyear = 1920
           if (options.cruncepv8):
@@ -481,6 +482,8 @@ for row in AFdatareader:
             endyear_trans=2019
           elif (options.princeton):
             endyear_trans=2012
+          elif (options.era5 or options.era5_land):
+            endyear_trans=2022
           else:
             endyear_trans=2010
         else:
