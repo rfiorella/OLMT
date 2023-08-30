@@ -15,7 +15,7 @@
 # case 6: test site run with ERA5 DATM format. make domain, surface, and
 # landuse files at runtime.
 
-set case=5
+set case=6
 
 if ($case == 1) then
   python3 ./site_fullrun.py --compiler gnu --mpilib openmpi --machine lanl-ees \
@@ -47,4 +47,13 @@ else if ($case == 5) then
         --surffile /project/neon_e3sm/inputdata/lnd/clm2/surfdata_map/Yukon-surfdata_1584x1_sparse_grid_230731.nc \
         --gswp3 --cpl_bypass --ccsm_input /project/neon_e3sm/inputdata --np 64 \
         --model_root /home/rfiorella/NGEE-Arctic-E3SM --exeroot /home/rfiorella/OLMT-output/
+else if ($case == 6) then
+  python3 ./site_fullrun.py --compiler gnu --mpilib openmpi --machine lanl-ees \
+         --site AK-TLG --sitegroup NGEEArctic --caseidprefix test6 --cpl_bypass --era5 \
+         --metdir /project/neon_e3sm/inputdata/atm/datm7/atm_forcing.datm7.ERA5Land.c230829_teller \
+         --srcmods_loc /home/rfiorella/OLMT/srcmods_era5cb \
+         --domainfile /project/neon_e3sm/inputdata/share/domains/domain.clm/domain.lnd.1x1pt_teller-GRID_navy.nc \
+         --surffile /project/neon_e3sm/inputdata/lnd/clm2/surfdata_map/surfdata_1x1pt_teller-GRID_simyr1850_c360x720_c171002.nc \
+         --landusefile /project/neon_e3sm/inputdata/lnd/clm2/surfdata_map/landuse.timeseries_1x1pt_teller-GRID_simyr1850-2015_c180423.nc \
+         --nofire --no_budgets --spinup_vars --nopointdata
 endif
