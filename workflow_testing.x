@@ -41,10 +41,10 @@ else if ($case == 4) then
          --nofire --no_budgets --spinup_vars --nopointdata
 else if ($case == 5) then
   python3  ./global_fullrun.py --compiler gnu --mpilib openmpi --machine lanl-ees --caseidprefix test5 \
-        --nopftdyn --nofire --nopointdata --dailyrunoff --SP --nofn --noad \
+        --nopftdyn --nofire --nopointdata --dailyrunoff --SP \
         --ccsm_input /project/neon_e3sm/inputdata/ --caseroot /project/ngee3/rfiorella/output/ \
-        --domainfile /project/neon_e3sm/inputdata/share/domains/domain.clm/smYukon-domain_144x1_sparse_grid_230824.nc \
-        --surffile /project/neon_e3sm/inputdata/lnd/clm2/surfdata_map/smYukon-surfdata_144x1_sparse_grid_230824.nc \
+        --domainfile /project/neon_e3sm/inputdata/share/domains/domain.clm/Yukon-domain_1584x1_sparse_grid_230731.nc \
+        --surffile /project/neon_e3sm/inputdata/lnd/clm2/surfdata_map/Yukon-surfdata_1584x1_sparse_grid_230731.nc \
         --gswp3 --cpl_bypass --ccsm_input /project/neon_e3sm/inputdata --np 64 \
         --model_root /home/rfiorella/NGEE-Arctic-E3SM --exeroot /home/rfiorella/OLMT-output/
 endif
