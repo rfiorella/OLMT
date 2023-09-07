@@ -247,6 +247,11 @@ parser.add_option("--no_snicar_ad", dest="no_snicar_ad", \
                   help = "Turn off SNICAR-AD snow microphysics model", action = "store_false")
 parser.add_option("--use_extra_snow_layers", dest = "use_extra_snow_layers", \
                   help = "Turn on extra snow layers", action="store_false")
+#topounits (does this do anything for single cells?)
+parser.add_option("--topounits", dest="topounits", default=False,
+                  help="Turn on topounits > 1", action='store_true')
+parser.add_option("--topounits_atmdownscale", dest = "topounits_atmdownscale", default=False,
+                  help="Use atmospheric downscaling in topounits", action='store_true')
 
 
 parser.add_option("--var_list_pft", dest="var_list_pft", default="",help='Comma-separated list of vars to output at PFT level')
@@ -684,6 +689,11 @@ for row in AFdatareader:
             basecmd = basecmd + ' --use_extra_snow_layers'
         if (options.no_snicar_ad):
             basecmd = basecmd + ' --no_snicar_ad'
+        # topounits
+        if (options.topounits):
+            basecmd = basecmd + ' --topounits'
+        if (options.topounits_atmdownscale):
+            basecmd = basecmd + ' --topounits_atmdownscale'
        
 #---------------- build commands for runcase.py -----------------------------
 

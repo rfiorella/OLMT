@@ -15,7 +15,7 @@
 # case 6: test site run with ERA5 cpl bypass format. user provided domain, surface, and
 # landuse files.
 
-set case=7
+set case=9
 
 if ($case == 1) then
   python3 ./site_fullrun.py --compiler gnu --mpilib openmpi --machine lanl-ees \
@@ -72,4 +72,22 @@ else if ($case == 8) then
         --surffile /project/neon_e3sm/inputdata/lnd/clm2/surfdata_map/Yukon-surfdata_1584x1_sparse_grid_230731.nc \
         --gswp3 --cpl_bypass --np 32 --model_root /home/rfiorella/NGEE-Arctic-E3SM \
         --srcmods_loc /home/rfiorella/OLMT/srcmods_gswp3v1
+else if ($case == 9) then
+  python3 ./site_fullrun.py --compiler gnu --mpilib openmpi --machine lanl-ees \
+         --site AK-TLG --sitegroup NGEEArctic --caseidprefix test9 --cpl_bypass --era5 \
+         --metdir /project/neon_e3sm/inputdata/atm/datm7/atm_forcing.datm7.ERA5Land.c230829_teller \
+         --srcmods_loc /home/rfiorella/OLMT/srcmods_era5cb --topounits --topounits_atmdownscale \
+         --domainfile /project/neon_e3sm/inputdata/share/domains/domain.clm/domain.lnd.1x1pt_teller-GRID_navy.nc \
+         --surffile /project/neon_e3sm/inputdata/lnd/clm2/surfdata_map/surfdata_1x1pt_teller-GRID_simyr1850_c360x720_c171002.nc \
+         --landusefile /project/neon_e3sm/inputdata/lnd/clm2/surfdata_map/landuse.timeseries_1x1pt_teller-GRID_simyr1850-2015_c180423.nc \
+         --nofire --no_budgets --nopointdata --model_root /home/rfiorella/NGEE-Arctic-E3SM
+else if ($case == 10) then
+  python3 ./site_fullrun.py --compiler gnu --mpilib openmpi --machine lanl-ees \
+         --site AK-TLG --sitegroup NGEEArctic --caseidprefix test10 --cpl_bypass --era5 \
+         --metdir /project/neon_e3sm/inputdata/atm/datm7/atm_forcing.datm7.ERA5Land.c230829_teller \
+         --srcmods_loc /home/rfiorella/OLMT/srcmods_era5cb --topounits --topounits_atmdownscale \
+         --domainfile /project/neon_e3sm/inputdata/share/domains/domain.clm/domain.lnd.1x1pt_teller-GRID_navy.nc \
+         --surffile /project/neon_e3sm/inputdata/lnd/clm2/surfdata_map/surfdata_1x1pt_teller-GRID_simyr1850_c360x720_c171002.nc \
+         --landusefile /project/neon_e3sm/inputdata/lnd/clm2/surfdata_map/landuse.timeseries_1x1pt_teller-GRID_simyr1850-2015_c180423.nc \
+         --nofire --no_budgets --nopointdata --model_root /home/rfiorella/NGEE-Arctic-E3SM
 endif
