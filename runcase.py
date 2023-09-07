@@ -1432,11 +1432,11 @@ for i in range(1,int(options.ninst)+1):
         output.write(" do_budgets = .false.\n")
     # snow options
     if (options.dust_snow_mixing):
-        output.write(" use_top_solar_rad = .true.\n")
+        output.write(" use_dust_snow_internal_mixing = .true.\n")
     if (options.no_snicar_ad):
         output.write(" use_snicar_ad = .false.\n")
     if (options.use_extra_snow_layers):
-        output.write(" use_extra_snow_layers = .true.\n")
+        output.write(" use_extrasnowlayers = .true.\n")
 
     #pft dynamics file for transient run
     if ('20TR' in compset or options.istrans):

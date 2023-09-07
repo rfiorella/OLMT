@@ -185,6 +185,13 @@ parser.add_option("--topounits", dest="topounits", default=False,
                   help="Turn on topounits > 1", action='store_true')
 parser.add_option("--topounits_atmdownscale", dest = "topounits_atmdownscale", default=False,
                   help="Use atmospheric downscaling in topounits", action='store_true')
+# snow options:
+parser.add_option("--dust_snow_mixing", dest="dust_snow_mixing", default=False, \
+                  help = "Use Hao et al. dust/snow mixing albedo parameterization", action="store_false")
+parser.add_option("--no_snicar_ad", dest="no_snicar_ad", \
+                  help = "Turn off SNICAR-AD snow microphysics model", action = "store_false")
+parser.add_option("--use_extra_snow_layers", dest = "use_extra_snow_layers", default=False\
+                  help = "Turn on extra snow layers", action="store_false")
 
 (options, args) = parser.parse_args()
 
@@ -563,6 +570,12 @@ if (options.topounits):
     basecmd = basecmd+' --topounits'
 if (options.topounits_atmdownscale):
     basecmd = basecmd+' --topounits_atmdownscale'
+if (options.dust_snow_mixing):
+    basecmd = basecmd+' --dust_snow_mixing'
+if (options.no_snicar_ad):
+    basecmd = basecmd+' --no_snicar_ad'
+if (options.use_extra_snow_layers):
+    basecmd = basecmd+' --use_extra_snow_layers'
 basecmd = basecmd + ' --np '+str(options.np)
 basecmd = basecmd + ' --tstep '+str(options.tstep)
 basecmd = basecmd + ' --co2_file '+options.co2_file
