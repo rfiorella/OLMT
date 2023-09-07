@@ -1420,14 +1420,14 @@ for i in range(1,int(options.ninst)+1):
     
     if (options.var_soilthickness):
         output.write(" use_var_soil_thick = .TRUE.\n")
-#    if (options.topounits):
-#        output.write(" fsurdat = '/project/neon_e3sm/inputdata/lnd/clm2/surfdata/half_degree_merge_surfdata_0.5x0.5_simyr2000_c190418.with_aveDTB.20201222.nc'\n")
-#        if (options.topounits_atmdownscale):
-#            output.write(" use_atm_downscaling_to_topunit = .true.\n")
-#        else: # needed? maybe not.
-#            output.write(" use_atm_downscaling_to_topunit = .false.\n")
-#        if (options.topounits_raddownscale):
-#            output.write(" use_top_solar_rad = .true.\n")
+    if (options.topounits):
+        output.write(" fsurdat = '/project/neon_e3sm/inputdata/lnd/clm2/surfdata/half_degree_merge_surfdata_0.5x0.5_simyr2000_c190418.with_aveDTB.20201222.nc'\n")
+        if (options.topounits_atmdownscale):
+            output.write(" use_atm_downscaling_to_topunit = .true.\n")
+        else: # needed? maybe not.
+            output.write(" use_atm_downscaling_to_topunit = .false.\n")
+        if (options.topounits_raddownscale):
+            output.write(" use_top_solar_rad = .true.\n")
     if (options.no_budgets):
         output.write(" do_budgets = .false.\n")
     # snow options

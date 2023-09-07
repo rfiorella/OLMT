@@ -562,7 +562,7 @@ if (options.pftdynfile != ''):
 if (options.topounits):
     basecmd = basecmd+' --topounits'
 if (options.topounits_atmdownscale):
-    basecmd = basecmd+'--topounits_atmdownscale'
+    basecmd = basecmd+' --topounits_atmdownscale'
 basecmd = basecmd + ' --np '+str(options.np)
 basecmd = basecmd + ' --tstep '+str(options.tstep)
 basecmd = basecmd + ' --co2_file '+options.co2_file
