@@ -420,7 +420,7 @@ elif ('chrysalis' in options.machine):
     ppn=64
 elif ('pm-cpu' in options.machine):
     ppn=128
-elif ('docker' in options.machine):
+elif ('docker' in options.machine or 'mac' in options.machine):
     ppn=4
 elif ('ees' in options.machine):
     ppn=32 # could probably choose more, but this seems a safe option.
@@ -1751,10 +1751,6 @@ if (not cpl_bypass):
     for s in myinput:
         if ('streams =' in s):
             myalign_year = 1 #startyear
-            #if (options.align_year != -999):
-            #    print(options.align_year)
-            #    myalign_year = options.align_year
-            #    print(myalign_year+" <- why are you 12? you should be 1")
             if (options.istrans or '20TR' in compset):
                 mypresaero = '"datm.streams.txt.presaero.trans_1850-2000 1850 1850 2000"'
                 myco2      = ', "datm.streams.txt.co2tseries.20tr 1766 1766 2010"'
@@ -2029,7 +2025,7 @@ if ((options.ensemble_file != '' or int(options.mc_ensemble) != -1) and (options
         if (options.cn_only or options.c_only):
             cnp= 'False'
         if ('docker' in options.machine or 'oic' in options.machine or 'cades' in options.machine or 'ubuntu' in options.machine or
-            'ees' in options.machine):
+            'ees' in options.machine or 'mac' in options.machine):
             mpicmd = 'mpirun'
             if ('cades' in options.machine):
                 mpicmd = '/software/dev_tools/swtree/cs400_centos7.2_pe2016-08/openmpi/1.10.3/centos7.2_gnu5.3.0/bin/mpirun'
