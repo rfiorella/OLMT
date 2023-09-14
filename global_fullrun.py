@@ -187,11 +187,11 @@ parser.add_option("--topounits_atmdownscale", dest = "topounits_atmdownscale", d
                   help="Use atmospheric downscaling in topounits", action='store_true')
 # snow options:
 parser.add_option("--dust_snow_mixing", dest="dust_snow_mixing", default=False, \
-                  help = "Use Hao et al. dust/snow mixing albedo parameterization", action="store_false")
-parser.add_option("--no_snicar_ad", dest="no_snicar_ad", \
-                  help = "Turn off SNICAR-AD snow microphysics model", action = "store_false")
+                  help = "Use Hao et al. dust/snow mixing albedo parameterization", action="store_true")
+parser.add_option("--no_snicar_ad", dest="no_snicar_ad", default=False, \
+                  help = "Turn off SNICAR-AD snow microphysics model", action = "store_true")
 parser.add_option("--use_extra_snow_layers", dest = "use_extra_snow_layers", default=False, \
-                  help = "Turn on extra snow layers", action="store_false")
+                  help = "Turn on extra snow layers", action="store_true")
 
 (options, args) = parser.parse_args()
 

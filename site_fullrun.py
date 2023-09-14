@@ -241,17 +241,19 @@ parser.add_option("--landusefile", dest="pftdynfile", default='', \
                   help='user-defined dynamic PFT file')
 
 #snow options
-parser.add_option("--dust_snow_mixing", dest="dust_snow_mixing", \
-                  help = "Use Hao et al. dust/snow mixing albedo parameterization", action="store_false")
-parser.add_option("--no_snicar_ad", dest="no_snicar_ad", \
-                  help = "Turn off SNICAR-AD snow microphysics model", action = "store_false")
-parser.add_option("--use_extra_snow_layers", dest = "use_extra_snow_layers", \
-                  help = "Turn on extra snow layers", action="store_false")
+parser.add_option("--dust_snow_mixing", dest="dust_snow_mixing", default=False, \
+                  help = "Use Hao et al. dust/snow mixing albedo parameterization", action="store_true")
+parser.add_option("--no_snicar_ad", dest="no_snicar_ad", default=False, \
+                  help = "Turn off SNICAR-AD snow microphysics model", action = "store_true")
+parser.add_option("--use_extra_snow_layers", dest = "use_extra_snow_layers", default=False, \
+                  help = "Turn on extra snow layers", action="store_true")
 #topounits (does this do anything for single cells?)
 parser.add_option("--topounits", dest="topounits", default=False,
                   help="Turn on topounits > 1", action='store_true')
 parser.add_option("--topounits_atmdownscale", dest = "topounits_atmdownscale", default=False,
                   help="Use atmospheric downscaling in topounits", action='store_true')
+parser.add_option("--topounits_raddownscale", dest = "topounits_raddownscale", default=False,
+                  help="Use radiation downscaling in topounits", action='store_true')
 
 
 parser.add_option("--var_list_pft", dest="var_list_pft", default="",help='Comma-separated list of vars to output at PFT level')
