@@ -15,7 +15,7 @@
 # case 6: test site run with ERA5 cpl bypass format. user provided domain, surface, and
 # landuse files.
 
-set case=9
+set case=11
 
 if ($case == 1) then
   python3 ./site_fullrun.py --compiler gnu --mpilib openmpi --machine ees --site US-UMB --sitegroup AmeriFlux 
@@ -85,4 +85,13 @@ else if ($case == 10) then
          --surffile /project/neon_e3sm/inputdata/lnd/clm2/surfdata_map/surfdata_1x1pt_teller-GRID_simyr1850_c360x720_c171002.nc \
          --landusefile /project/neon_e3sm/inputdata/lnd/clm2/surfdata_map/landuse.timeseries_1x1pt_teller-GRID_simyr1850-2015_c180423.nc \
          --nofire --no_budgets --nopointdata --model_root /home/rfiorella/NGEE-Arctic-E3SM
+else if ($case == 11) then #docker test!
+  python3 ./site_fullrun.py --compiler gnu --mpilib openmpi --machine docker \
+         --site AK-TLG --sitegroup NGEEArctic --ccsm_input /home/e3smuser/inputdata \
+         --caseidprefix OLMT --cpl_bypass --gswp3 \
+         --metdir /home/e3smuser/inputdata/atm/datm7/atm_forcing.datm7.GSWP3.0.5d.v2.c180716_NGEE-Grid/cpl_bypass_teller-Grid \
+         --domainfile /home/e3smuser/inputdata/share/domains/domain.clm/domain.lnd.1x1pt_teller-GRID_navy.nc \
+         --surffile /home/e3smuser/inputdata/lnd/clm2/surfdata_map/surfdata_1x1pt_teller-GRID_simyr1850_c360x720_c171002.nc \
+         --landusefile /home/e3smuser/inputdata/lnd/clm2/surfdata_map/landuse.timeseries_1x1pt_teller-GRID_simyr1850-2015_c180423.nc \
+         --nofire --no_budgets --spinup_vars --nopointdata
 endif
