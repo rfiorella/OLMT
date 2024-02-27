@@ -304,6 +304,8 @@ parser.add_option("--fates_hydro", dest="fates_hydro", default=False, action="st
                   help = 'Set fates hydro to true')
 parser.add_option("--fates_nutrient", dest="fates_nutrient", default="", \
                   help = 'Which version of fates_nutrient to use (RD or ECA)')
+parser.add_option("--fates_logging", dest="fates_logging", default=False, action="store_true", \
+                  help = 'Set fates logging to true')
 parser.add_option("--fates_paramfile", dest="fates_paramfile", default="", \
                   help = 'Fates parameter file to use')
 parser.add_option("--var_soilthickness", dest="var_soilthickness", default=False, \
@@ -423,7 +425,7 @@ elif ('pm-cpu' in options.machine):
     ppn=128
 elif ('docker' in options.machine or 'mac' in options.machine):
     ppn=4
-elif ('lanl-ees' in options.machine):
+elif ('ees' in options.machine):
     ppn=32 # could probably choose more, but this seems a safe option.
 if (options.ensemble_file == ''):
   ppn=min(ppn, int(options.np))
@@ -1128,9 +1130,8 @@ if ('20TR' in compset or options.istrans):
         os.system('./xmlchange RUN_STARTDATE=1850-01-01')
     
 #No pnetcdf for small cases on compy
-if (('docker' in options.machine or 'compy' in options.machine or \
-     'lanl-ees' in options.machine or 'compy' in options.machine) and int(options.np) < 80):
-    os.system('./xmlchange PIO_TYPENAME=netcdf')
+if (('docker' in options.machine or 'compy' in options.machine or 'ees' in options.machine) and int(options.np) < 80):
+  os.system('./xmlchange PIO_TYPENAME=netcdf')
 
 comps = ['ATM','LND','ICE','OCN','CPL','GLC','ROF','WAV','ESP','IAC']
 for c in comps:
@@ -1457,6 +1458,8 @@ for i in range(1,int(options.ninst)+1):
       output.write(" fates_paramfile = '"+options.fates_paramfile+"'\n")
     if (('ED' in compset or 'FATES' in compset) and options.fates_hydro):
       output.write(" use_fates_planthydro = .true.\n")
+    if (('ED' in compset or 'FATES' in compset) and options.fates_logging):
+      output.write(" use_fates_logging = .true.\n")
 
     if ('CROP' in compset or 'RD' in compset or 'ECA' in compset or options.fates_nutrient != ''):
         #soil order parameter file
@@ -1829,6 +1832,7 @@ if (not cpl_bypass and not isglobal):
                 temp  =s.replace('TEMPSTRING', str(numxpts)+'x'+str(numypts)+'pt'+'_'+options.site)
                 myoutput.write(temp)
             elif (('ED' in compset or 'FATES' in compset) and 'FLDS' in s):
+#            if (('ED' in compset or 'FATES' in compset) and 'FLDS' in s):
                 print('Not including FLDS in atm stream file')
             else:
                 myoutput.write(s)
@@ -2022,9 +2026,8 @@ if ((options.ensemble_file != '' or int(options.mc_ensemble) != -1) and (options
         cnp = 'True'
         if (options.cn_only or options.c_only):
             cnp= 'False'
-        if ('docker' in options.machine or 'oic' in options.machine or \
-            'cades' in options.machine or 'ubuntu' in options.machine or \
-            'mac' in options.machine or 'lanl-ees' in options.machine):
+        if ('docker' in options.machine or 'oic' in options.machine or 'cades' in options.machine or 'ubuntu' in options.machine or
+            'ees' in options.machine or 'mac' in options.machine):
             mpicmd = 'mpirun'
             if ('cades' in options.machine):
                 mpicmd = '/software/dev_tools/swtree/cs400_centos7.2_pe2016-08/openmpi/1.10.3/centos7.2_gnu5.3.0/bin/mpirun'

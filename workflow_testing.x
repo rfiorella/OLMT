@@ -18,14 +18,14 @@
 set case=9
 
 if ($case == 1) then
-  python3 ./site_fullrun.py --compiler gnu --mpilib openmpi --machine lanl-ees \
+  python3 ./site_fullrun.py --compiler gnu --mpilib openmpi --machine ees \
          --site US-UMB --sitegroup AmeriFlux --caseidprefix test1
 else if ($case == 2) then
-  python3 ./site_fullrun.py --compiler gnu --mpilib openmpi --machine lanl-ees \
+  python3 ./site_fullrun.py --compiler gnu --mpilib openmpi --machine ees \
          --site US-UMB --sitegroup AmeriFlux --gswp3 --cpl_bypass --caseidprefix test2 \
          --ccsm_input /project/neon_e3sm/inputdata --model_root /home/rfiorella/NGEE-Arctic-E3SM
 else if ($case == 3) then
-  python3 ./site_fullrun.py --compiler gnu --mpilib openmpi --machine lanl-ees \
+  python3 ./site_fullrun.py --compiler gnu --mpilib openmpi --machine ees \
          --site AK-TLG --sitegroup NGEEArctic --caseidprefix test3 --cpl_bypass --gswp3 \
          --metdir /project/neon_e3sm/inputdata/atm/datm7/atm_forcing.datm7.GSWP3.0.5d.v2.c180716_NGEE-Grid/cpl_bypass_teller-Grid \
          --domainfile /project/neon_e3sm/inputdata/share/domains/domain.clm/domain.lnd.1x1pt_teller-GRID_navy.nc \
@@ -33,14 +33,14 @@ else if ($case == 3) then
          --landusefile /project/neon_e3sm/inputdata/lnd/clm2/surfdata_map/landuse.timeseries_1x1pt_teller-GRID_simyr1850-2015_c180423.nc \
          --nofire --no_budgets --spinup_vars --nopointdata
 else if ($case == 4) then
-  python3 ./site_fullrun.py --compiler gnu --mpilib openmpi --machine lanl-ees \
+  python3 ./site_fullrun.py --compiler gnu --mpilib openmpi --machine ees \
          --site AK-TLG --sitegroup NGEEArctic --caseidprefix test4 --cpl_bypass --gswp3 \
          --domainfile /project/neon_e3sm/inputdata/share/domains/domain.clm/domain.lnd.1x1pt_teller-GRID_navy.nc \
          --surffile /project/neon_e3sm/inputdata/lnd/clm2/surfdata_map/surfdata_1x1pt_teller-GRID_simyr1850_c360x720_c171002.nc \
          --landusefile /project/neon_e3sm/inputdata/lnd/clm2/surfdata_map/landuse.timeseries_1x1pt_teller-GRID_simyr1850-2015_c180423.nc \
          --nofire --no_budgets --spinup_vars --nopointdata
 else if ($case == 5) then
-  python3  ./global_fullrun.py --compiler gnu --mpilib openmpi --machine lanl-ees --caseidprefix test5 \
+  python3  ./global_fullrun.py --compiler gnu --mpilib openmpi --machine ees --caseidprefix test5 \
         --nopftdyn --nofire --nopointdata --dailyrunoff --SP \
         --ccsm_input /project/neon_e3sm/inputdata/ --caseroot /project/ngee3/rfiorella/output/ \
         --domainfile /project/neon_e3sm/inputdata/share/domains/domain.clm/Yukon-domain_1584x1_sparse_grid_230731.nc \
@@ -90,4 +90,13 @@ else if ($case == 10) then
          --surffile /project/neon_e3sm/inputdata/lnd/clm2/surfdata_map/surfdata_1x1pt_teller-GRID_simyr1850_c360x720_c171002.nc \
          --landusefile /project/neon_e3sm/inputdata/lnd/clm2/surfdata_map/landuse.timeseries_1x1pt_teller-GRID_simyr1850-2015_c180423.nc \
          --nofire --no_budgets --nopointdata --model_root /home/rfiorella/NGEE-Arctic-E3SM
+else if ($case == 11) then #docker test!
+  python3 ./site_fullrun.py --compiler gnu --mpilib openmpi --machine docker \
+         --site AK-TLG --sitegroup NGEEArctic --ccsm_input /home/e3smuser/inputdata \
+         --caseidprefix OLMT --cpl_bypass --gswp3 \
+         --metdir /home/e3smuser/inputdata/atm/datm7/atm_forcing.datm7.GSWP3.0.5d.v2.c180716_NGEE-Grid/cpl_bypass_teller-Grid \
+         --domainfile /home/e3smuser/inputdata/share/domains/domain.clm/domain.lnd.1x1pt_teller-GRID_navy.nc \
+         --surffile /home/e3smuser/inputdata/lnd/clm2/surfdata_map/surfdata_1x1pt_teller-GRID_simyr1850_c360x720_c171002.nc \
+         --landusefile /home/e3smuser/inputdata/lnd/clm2/surfdata_map/landuse.timeseries_1x1pt_teller-GRID_simyr1850-2015_c180423.nc \
+         --nofire --no_budgets --spinup_vars --nopointdata
 endif

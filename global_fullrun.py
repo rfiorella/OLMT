@@ -303,7 +303,7 @@ if (options.compiler == ''):
         options.compiler = 'gnu'
     if (options.machine == 'compy'): 
         options.compiler = 'intel'
-    if (options.machine == 'lanl-ees'):
+    if (options.machine == 'ees'):
         options.compiler = 'gnu'
 
 #default MPIlibs
@@ -316,7 +316,7 @@ if (options.mpilib == ''):
         options.mpilib = 'mvapich'
     elif ('compy' in options.machine):
         options.mpilib = 'impi'
-    elif ('lanl-ees' in options.machine):
+    elif ('ees' in options.machine):
         options.mpilib = 'openmpi'
 
 #create ensemble file if requested (so that all cases use the same)
@@ -795,7 +795,7 @@ if (options.mc_ensemble <= 0):
 
 
     mysubmit_type = 'sbatch'
-    if ('docker' in options.machine or 'lanl-ees' in options.machine):
+    if ('docker' in options.machine or 'ees' in options.machine):
         mysubmit_type=''
     #if ('cades' in options.machine or 'anvil' in options.machine or 'compy' in options.machine or 'cori' in options.machine):
     #    mysubmit_type = 'sbatch'

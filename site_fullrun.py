@@ -193,6 +193,8 @@ parser.add_option("--fates", dest="fates", default=False, action="store_true", \
                   help = 'Use fates model')
 parser.add_option("--fates_nutrient", dest="fates_nutrient", default="", \
                   help = 'Which version of fates_nutrient to use (RD or ECA)')
+parser.add_option("--fates_logging", dest="fates_logging", default=False, action="store_true", \
+                  help = 'Set fates logging to true')
 parser.add_option("--ECA", dest="eca", default=False, action="store_true", \
                   help = 'Use ECA compset')
 parser.add_option("--c_only", dest="c_only", default=False, action ="store_true",  \
@@ -355,7 +357,7 @@ elif ('anvil' in options.machine or 'chrysalis' in options.machine):
     ccsm_input = '/home/ccsm-data/inputdata'
 elif ('compy' in options.machine):
     ccsm_input = '/compyfs/inputdata/'
-elif ('lanl-ees' in options.machine):
+elif ('ees' in options.machine):
     ccsm_input = '/project/neon_e3sm/inputdata'
 
 #if (options.compiler != ''):
@@ -409,7 +411,7 @@ if (options.runroot == '' or (os.path.exists(options.runroot) == False)):
     elif ('compy' in options.machine):
         runroot='/compyfs/'+myuser+'/e3sm_scratch'
         myproject='e3sm'
-    elif ('lanl-ees' in options.machine):
+    elif ('ees' in options.machine):
         runroot='/project/ngee3/'+myuser+'/e3sm_scratch'
     else:
         runroot = csmdir+'/run'
@@ -626,6 +628,8 @@ for row in AFdatareader:
             basecmd = basecmd+ ' --fates_paramfile '+options.fates_paramfile
         if (options.fates_nutrient != ''):
             basecmd = basecmd+ ' --fates_nutrient '+options.fates_nutrient
+        if (options.fates_logging):
+            basecmd = basecmd+ ' --fates_logging '
         if (options.surfdata_grid):
             basecmd = basecmd+' --surfdata_grid'
         if (options.ensemble_file != ''):   
@@ -1071,20 +1075,20 @@ for row in AFdatareader:
                     sys.exit(1)
 
 
-            # experiment simulations
-            if ((options.eco2_file != '') and not options.cpl_bypass):
-                print('\n\nSetting up experiment transient case 2\n')
-                result = os.system(cmd_trns2)
-                print(cmd_trns2)
-                if (result > 0):
-                    print('Site_fullrun:  Error in runcase.py for transient 2')
-                    sys.exit(1)
-                print('\n\nSetting up experiment transient case 3\n')
-                print(cmd_trns3)
-                result = os.system(cmd_trns3)
-                if (result > 0):
-                    print('Site_fullrun:  Error in runcase.py for transient 3')
-                    sys.exit(1)
+        # experiment simulations
+        if ((options.eco2_file != '') and not options.cpl_bypass):
+            print('\n\nSetting up experiment transient case 2\n')
+            result = os.system(cmd_trns2)
+            print(cmd_trns2)
+            if (result > 0):
+                print('Site_fullrun:  Error in runcase.py for transient 2')
+                sys.exit(1)
+            print('\n\nSetting up experiment transient case 3\n')
+            print(cmd_trns3)
+            result = os.system(cmd_trns3)
+            if (result > 0):
+                print('Site_fullrun:  Error in runcase.py for transient 3')
+                sys.exit(1)
 
                  
         # Create .pbs etc scripts for each case
@@ -1119,8 +1123,8 @@ for row in AFdatareader:
                 mysubmit_type = 'sbatch'
             if ('ubuntu' in options.machine or 'mac' in options.machine or 'docker' in options.machine):
                 mysubmit_type = ''
-            if ('lanl-ees' in options.machine):
-                mysubmit_type = ''
+            if ('ees' in options.machine):
+            	mysubmit_type = ''
             if ((sitenum % npernode) == 0):
                 mycase_firstsite = ad_case_firstsite
                 if (options.noad):
@@ -1214,17 +1218,6 @@ for row in AFdatareader:
                     output.write('source $MODULESHOME/init/bash\n')
                     output.write('module unload python\n')
                     output.write('module load python/2.7.12\n')
-# RF - 230829 - doesn't work for some reason...
-#                if ('lanl-ees' in options.machine):
-#                    output.write('module purge')
-#                    output.write('module load anaconda-python/3.8')
-#                    output.write('module load gcc/9.4.0')
-#                    output.write('module load openmpi/3.1.6/gcc-9.3.0')
-#                    output.write('module load cmake')
-#                    output.write('module load hdf5/1.14.1-2')
-#                    output.write('module load pnetcdf/1.12.3/openmpi3.1.6-gcc9.3.0')
-#                    output.write('module load netcdf-c/4.9.2/openmpi3.1.6-gcc9.3.0')
-#                    output.write('module load netcdf-fortram/4.6.0/openmpi3.1.6-gcc9.3.0')
             else:
                 output = open('./scripts/'+myscriptsdir+'/'+c+'_group'+str(groupnum)+'.pbs','a')   
                
@@ -1416,6 +1409,10 @@ for row in AFdatareader:
                   cases.append(basecase+'_'+modelst+'_trans')
                 else:
                   cases.append(basecase+'_'+modelst.replace('1850','20TR'))
+
+                if (options.eco2_file):
+                  cases.append(basecase+'_'+modelst.replace('1850','20TR')+'_aCO2')
+                  cases.append(basecase+'_'+modelst.replace('1850','20TR')+'_eCO2')
 
             job_depend_run=''    
             if (len(cases) > 1 and options.constraints != ''):
