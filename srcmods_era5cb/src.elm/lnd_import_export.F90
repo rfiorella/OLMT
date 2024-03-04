@@ -46,8 +46,8 @@ contains
     ! !ARGUMENTS:
     type(bounds_type)  , intent(in)    :: bounds   ! bounds
     real(r8)           , intent(in)    :: x2l(:,:) ! driver import state to land model
-    type(atm2lnd_type) , intent(inout) :: atm2lnd_vars      ! clm internal input data type
-    type(glc2lnd_type) , intent(inout) :: glc2lnd_vars      ! clm internal input data type
+    type(atm2lnd_type) , intent(inout) :: atm2lnd_vars      ! elm internal input data type
+    type(glc2lnd_type) , intent(inout) :: glc2lnd_vars      ! elm internal input data type
     type(lnd2atm_type) , intent(in)    :: lnd2atm_vars
     !
     ! !LOCAL VARIABLES:
@@ -1364,7 +1364,7 @@ contains
     ! !USES:
     use shr_kind_mod       , only : r8 => shr_kind_r8
     use elm_varctl         , only : iulog, create_glacier_mec_landunit
-    use clm_time_manager   , only : get_nstep, get_step_size  
+    use elm_time_manager   , only : get_nstep, get_step_size  
     use domainMod          , only : ldomain
     use seq_drydep_mod     , only : n_drydep
     use shr_megan_mod      , only : shr_megan_mechcomps_n
@@ -1372,8 +1372,8 @@ contains
     ! !ARGUMENTS:
     implicit none
     type(bounds_type) , intent(in)    :: bounds  ! bounds
-    type(lnd2atm_type), intent(inout) :: lnd2atm_vars ! clm land to atmosphere exchange data type
-    type(lnd2glc_type), intent(inout) :: lnd2glc_vars ! clm land to atmosphere exchange data type
+    type(lnd2atm_type), intent(inout) :: lnd2atm_vars ! elm land to atmosphere exchange data type
+    type(lnd2glc_type), intent(inout) :: lnd2glc_vars ! elm land to atmosphere exchange data type
     real(r8)          , intent(out)   :: l2x(:,:)! land to coupler export state on land grid
     !
     ! !LOCAL VARIABLES:
