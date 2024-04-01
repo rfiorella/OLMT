@@ -96,7 +96,7 @@ parser.add_option("--sitegroup", dest="sitegroup",default="AmeriFlux", \
                   help = "site group to use (default AmeriFlux)")
 parser.add_option("--ccsm_input", dest="ccsm_input", default='', \
                   help = "input data directory for CESM (required)")
-# metdata 
+# metdata
 parser.add_option("--nopointdata", dest="nopointdata", default=False, action="store_true", \
                   help="Do NOT make point data (use data already created)")
 parser.add_option("--metdir", dest="metdir", default="none", \
@@ -200,7 +200,7 @@ parser.add_option("--ECA", dest="eca", default=False, action="store_true", \
 parser.add_option("--c_only", dest="c_only", default=False, action ="store_true",  \
                   help='Carbon only (saturated N&P)')
 parser.add_option("--cn_only", dest="cn_only", default=False, action ="store_true", \
-                  help='Carbon/Nitrogen only (saturated P)') 
+                  help='Carbon/Nitrogen only (saturated P)')
 parser.add_option("--srcmods_loc", dest="srcmods_loc", default='', \
                   help = 'Copy sourcemods from this location')
 parser.add_option("--daymet", dest="daymet", default=False, \
@@ -221,7 +221,7 @@ parser.add_option("--spruce_treatments", dest="spruce_treatments", default=False
 # model output options
 parser.add_option("--hist_vars", dest="hist_vars", default='', \
                   help = 'Output only selected variables in h0 file (comma delimited)')
-parser.add_option("--diags", dest="diags", default=False, action="store_true", 
+parser.add_option("--diags", dest="diags", default=False, action="store_true",
                   help="Write special outputs for diagnostics")
 parser.add_option("--trans_varlist", dest = "trans_varlist", default='', \
                   help = "Transient outputs")
@@ -250,8 +250,6 @@ parser.add_option("--no_snicar_ad", dest="no_snicar_ad", default=False, \
 parser.add_option("--use_extra_snow_layers", dest = "use_extra_snow_layers", default=False, \
                   help = "Turn on extra snow layers", action="store_true")
 #topounits (does this do anything for single cells?)
-parser.add_option("--topounits", dest="topounits", default=False,
-                  help="Turn on topounits > 1", action='store_true')
 parser.add_option("--topounits_atmdownscale", dest = "topounits_atmdownscale", default=False,
                   help="Use atmospheric downscaling in topounits", action='store_true')
 parser.add_option("--topounits_raddownscale", dest = "topounits_raddownscale", default=False,
@@ -330,7 +328,7 @@ if (options.machine == ''):
        npernode=32
    elif ('blues' in hostname or 'blogin' in hostname):
        print('Hostname = '+hostname+' and machine not specified.  Assuming anvil')
-       options.machine = 'anvil' 
+       options.machine = 'anvil'
        npernode=36
    elif ('compy' in hostname):
        options.machine = 'compy'
@@ -340,7 +338,7 @@ if (options.machine == ''):
        npernode = 8
    elif ('chrlogin' in hostname):
        options.machine = 'chrysalis'
-       npernode = 64    
+       npernode = 64
    else:
        print('ERROR in site_fullrun.py:  Machine not specified.  Aborting')
        sys.exit(1)
@@ -367,7 +365,7 @@ elif ('ees' in options.machine):
 #        options.compiler = 'intel'
 #    if (options.machine == 'cades'):
 #        options.compiler = 'gnu'
-    
+
 
 mycaseid   = options.mycaseid
 srcmods    = options.srcmods_loc
@@ -401,7 +399,7 @@ if (options.runroot == '' or (os.path.exists(options.runroot) == False)):
         runroot='/global/cscratch1/sd/'+myuser
         myinput = open(os.environ.get('HOME')+'/.cesm_proj','r')
         for s in myinput:
-           myproject=s[:-1] 
+           myproject=s[:-1]
         print('Project = '+myproject)
     elif ('edison' in options.machine):
         runroot=os.environ.get('CSCRATCH')+'/acme_scratch/edison/'
@@ -448,7 +446,7 @@ if (int(options.mc_ensemble) != -1):
                     else:
                         param_min.append(float(s.split()[2]))
                         param_max.append(float(s.split()[3]))
-        input.close() 
+        input.close()
         n_parameters = len(param_names)
     nsamples = int(options.mc_ensemble)
     samples=numpy.zeros((n_parameters,nsamples), dtype=float)
@@ -496,7 +494,7 @@ for row in AFdatareader:
         else:
             startyear = int(row[6])
             endyear   = int(row[7])
-        if (options.diags): 
+        if (options.diags):
             timezone = int(row[9])
 
         site_endyear = int(row[7])
@@ -524,7 +522,7 @@ for row in AFdatareader:
 
 
         fsplen = int(ny_fin)
- 
+
         #get align_year
         year_align = (endyear-1850+1) % ncycle
 
@@ -612,7 +610,7 @@ for row in AFdatareader:
         if (options.gswp3):
             basecmd = basecmd+' --gswp3'
         if (options.gswp3_w5e5):
-            basecmd = basecmd+' --gswp3_w5e5'    
+            basecmd = basecmd+' --gswp3_w5e5'
         if (options.princeton):
             basecmd = basecmd+' --princeton'
         if (options.daymet):
@@ -632,7 +630,7 @@ for row in AFdatareader:
             basecmd = basecmd+ ' --fates_logging '
         if (options.surfdata_grid):
             basecmd = basecmd+' --surfdata_grid'
-        if (options.ensemble_file != ''):   
+        if (options.ensemble_file != ''):
             basecmd = basecmd+' --ensemble_file '+options.ensemble_file
             basecmd = basecmd+' --parm_list '+options.parm_list
         if (options.archiveroot !=''):
@@ -648,7 +646,7 @@ for row in AFdatareader:
             basecmd = basecmd+' --add_co2 '+str(options.addco2)
             basecmd = basecmd+' --startdate_add_co2 '+str(options.sd_addco2)
         if (options.surffile != ''):
-            basecmd = basecmd+' --surffile '+options.surffile      
+            basecmd = basecmd+' --surffile '+options.surffile
         basecmd = basecmd + ' --ng '+str(options.ng)
         basecmd = basecmd + ' --np '+str(options.np)
         basecmd = basecmd + ' --tstep '+str(options.tstep)
@@ -687,7 +685,7 @@ for row in AFdatareader:
         if (myproject != ''):
           basecmd = basecmd+' --project '+myproject
         if (options.domainfile != ''):
-          basecmd = basecmd+' --domainfile '+options.domainfile 
+          basecmd = basecmd+' --domainfile '+options.domainfile
         # snow opts
         if (options.dust_snow_mixing):
             basecmd = basecmd + ' --dust_snow_mixing'
@@ -696,11 +694,11 @@ for row in AFdatareader:
         if (options.no_snicar_ad):
             basecmd = basecmd + ' --no_snicar_ad'
         # topounits
-        if (options.topounits):
-            basecmd = basecmd + ' --topounits'
         if (options.topounits_atmdownscale):
             basecmd = basecmd + ' --topounits_atmdownscale'
-       
+        if (options.topounits_raddownscale):
+            basecmd = basecmd + ' --topounits_raddownscale'
+
 #---------------- build commands for runcase.py -----------------------------
 
         # define compsets
@@ -709,16 +707,16 @@ for row in AFdatareader:
             nutrients = 'C'
         elif (options.cn_only):
             nutrients = 'CN'
-        else: 
+        else:
             nutrients = 'CNP'
-        
+
         # CENTURY or CTC
         if (options.centbgc):
             decomp_model = 'CNT'
         else:
             decomp_model = 'CTC'
 
-        # ECA or RD 
+        # ECA or RD
         if (options.eca):
             mycompset = nutrients+'ECA'+decomp_model
         else:
@@ -737,16 +735,16 @@ for row in AFdatareader:
             mycompset_adsp = mycompset.replace('CNP','CN')
         else:
             mycompset_adsp = mycompset
-        
-        # crop model 
+
+        # crop model
         if (options.crop):
             if (model_name == 'elm'):
               mycompset = 'ELMCNCROP'
             else:
               mycompset = 'CLM45CNCROP'
-            mycompset_adsp = mycompset   
-        
-        # model executable E3SM / CESM 
+            mycompset_adsp = mycompset
+
+        # model executable E3SM / CESM
         myexe = 'e3sm.exe'
         if ('clm5' in options.csmdir):
             mycompset = 'Clm50BgcGs'
@@ -815,7 +813,7 @@ for row in AFdatareader:
                   basecase = basecase+'_ICB'+mycompset
                 else:
                   basecase = basecase+'_ICB1850'+mycompset
-            else: 
+            else:
                 basecase = basecase+'_I1850'+mycompset
         else:
             if (options.cpl_bypass):
@@ -880,9 +878,9 @@ for row in AFdatareader:
 
         if (options.spinup_vars):
                 cmd_fnsp = cmd_fnsp+' --spinup_vars'
-        #if (options.ensemble_file != '' and options.notrans):	
+        #if (options.ensemble_file != '' and options.notrans):
         #        cmd_fnsp = cmd_fnsp+' --spinup_vars'
-        if (options.ensemble_file != '' and options.notrans and options.constraints == ''):	
+        if (options.ensemble_file != '' and options.notrans and options.constraints == ''):
                 cmd_fnsp = cmd_fnsp + ' --postproc_file '+options.postproc_file
 
 
@@ -902,7 +900,7 @@ for row in AFdatareader:
             str(year_align+1850)+' --hist_nhtfrq '+ \
             options.hist_nhtfrq+' --hist_mfilt '+options.hist_mfilt+' --no_build' + \
             ' --exeroot '+ad_exeroot+' --nopointdata'
-        
+
         if (options.cpl_bypass):
             if (options.crop or options.fates):
               cmd_trns = cmd_trns+' --istrans --compset ICB'+mycompset
@@ -910,7 +908,7 @@ for row in AFdatareader:
               cmd_trns = cmd_trns+' --compset ICB20TR'+mycompset
         else:
             cmd_trns = cmd_trns+' --compset I20TR'+mycompset
-        
+
         if (options.spinup_vars):
             cmd_trns = cmd_trns + ' --spinup_vars'
         if (options.trans_varlist != ''):
@@ -926,7 +924,7 @@ for row in AFdatareader:
             cmd_trns = cmd_trns + ' --nofire'
 
 
-        #transient phase 2 
+        #transient phase 2
         #(CRU-NCEP only, without coupler bypass)
         if ((options.cruncep or options.cruncepv8 or options.gswp3 or options.princeton \
                 or options.gswp3_w5e5) and not options.cpl_bypass):
@@ -942,20 +940,20 @@ for row in AFdatareader:
 
 
         # experimental manipulation transients, without coupler bypass
-        # APW: check align_year is correct, 
+        # APW: check align_year is correct,
         # APW: do we want different outputs? Maybe the full set here and a reduced set for the initial transient?
         elif ((options.eco2_file != '') and not options.cpl_bypass):
             basecase=basecase.replace('1850','20TR')
 
-            # ambient CO2 run 
+            # ambient CO2 run
             cmd_trns2 = basecmd+' --transtag aCO2 --finidat_case '+basecase+ \
                 ' --finidat_year '+str(startyear)+' --run_startyear '+str(startyear)+' --run_units nyears ' \
                 +' --run_n '+str(ncycle)+' --align_year '+str(startyear)+ \
                 ' --hist_nhtfrq '+options.hist_nhtfrq+' --hist_mfilt '+ \
                 options.hist_mfilt+' --no_build'+' --exeroot '+ad_exeroot + \
                 ' --compset I20TR'+mycompset+' --nopointdata'
-          
-            # elevated CO2 run 
+
+            # elevated CO2 run
             basecmd_eco2=basecmd.replace(options.co2_file,options.eco2_file)
             cmd_trns3 = basecmd_eco2+' --transtag eCO2 --finidat_case '+basecase+ \
                 ' --finidat_year '+str(startyear)+' --run_startyear '+str(startyear)+' --run_units nyears ' \
@@ -963,7 +961,7 @@ for row in AFdatareader:
                 ' --hist_nhtfrq '+options.hist_nhtfrq+' --hist_mfilt '+ \
                 options.hist_mfilt+' --no_build'+' --exeroot '+ad_exeroot + \
                 ' --compset I20TR'+mycompset+' --nopointdata'
-          
+
 
 #---------------------------------------------------------------------------------
 
@@ -1090,9 +1088,9 @@ for row in AFdatareader:
                 print('Site_fullrun:  Error in runcase.py for transient 3')
                 sys.exit(1)
 
-                 
+
         # Create .pbs etc scripts for each case
-        # build vector of case aliases 
+        # build vector of case aliases
         case_list = []
         if (options.noad == False):
             case_list.append('ad_spinup')
@@ -1187,7 +1185,7 @@ for row in AFdatareader:
                           output.write(s.replace(firstsite,site))
                 input.close()
                 output.write("\n")
-        
+
                 if (options.machine == 'eos'):
                     output.write('source $MODULESHOME/init/csh\n')
                     output.write('module load nco\n')
@@ -1213,14 +1211,14 @@ for row in AFdatareader:
                     output.write('module unload scipy\n')
                     output.write('module unload numpy\n')
                     output.write('module load python/2.7-anaconda\n')
-                    output.write('module load nco\n')     
+                    output.write('module load nco\n')
                 if ('cades' in options.machine):
                     output.write('source $MODULESHOME/init/bash\n')
                     output.write('module unload python\n')
                     output.write('module load python/2.7.12\n')
             else:
-                output = open('./scripts/'+myscriptsdir+'/'+c+'_group'+str(groupnum)+'.pbs','a')   
-               
+                output = open('./scripts/'+myscriptsdir+'/'+c+'_group'+str(groupnum)+'.pbs','a')
+
             # build full spin compset for writing to submit scripts
             modelst = 'I1850'+mycompset
             if (options.cpl_bypass):
@@ -1243,7 +1241,7 @@ for row in AFdatareader:
             #Get the software environment for selected machines
             if (sitenum == 0 and ('ad_spinup' in c or (options.noad and 'fn_spinup' in c))):
                 if ('ad_spinup' in c):
-                  mycasedir=caseroot+'/'+basecase+'_'+modelst.replace('CNP','CN')+'_ad_spinup' 
+                  mycasedir=caseroot+'/'+basecase+'_'+modelst.replace('CNP','CN')+'_ad_spinup'
                 else:
                   mycasedir=caseroot+'/'+basecase+'_'+modelst
             if (sitenum % npernode == 0 and ('compy' in options.machine or 'anvil' in options.machine or 'chrysalis' in options.machine)):
@@ -1303,7 +1301,7 @@ for row in AFdatareader:
                  if (options.ad_Pinit):
                      plotcmd = plotcmd + ' --ad_Pinit'
                  output.write(plotcmd+' --vars NEE --ylog\n')
-                 output.write(plotcmd+' --vars TLAI,NPP,GPP,TOTVEGC,TOTSOMC\n') 
+                 output.write(plotcmd+' --vars TLAI,NPP,GPP,TOTVEGC,TOTSOMC\n')
                  if (options.machine == 'cades'):
                      output.write("scp -r ./plots/"+mycaseid+" acme-webserver.ornl.gov:~/www/single_point/plots\n")
 
@@ -1337,7 +1335,7 @@ for row in AFdatareader:
                     simroot=caseroot
                     simsuffix=''
                     simsubmit='./case.submit --no-batch &\n'
-                else: 
+                else:
                     simroot=runroot
                     simsuffix='/run'
                     simsubmit=runroot+'/'+ad_case_firstsite+'/bld/'+myexe+' &\n'
@@ -1345,7 +1343,7 @@ for row in AFdatareader:
                   output.write("cd "+simroot+'/'+basecase+"_"+modelst+"_"+c+simsuffix+"\n")
                 else:
                   output.write("cd "+simroot+'/'+basecase+"_"+modelst.replace('1850','20TR')+c.replace('trans','')+simsuffix+"\n")
-                output.write(simsubmit) 
+                output.write(simsubmit)
 
             if ('trans_diags' in c):
                  if (options.cpl_bypass):
@@ -1387,7 +1385,7 @@ for row in AFdatareader:
 
 
 #sys.exit('temp stop pre-submit')
-# submit jobs created by runcase.py 
+# submit jobs created by runcase.py
 #======================================================#
 
         #if ensemble simulations requested, submit jobs created by runcase.py in correct order
@@ -1414,7 +1412,7 @@ for row in AFdatareader:
                   cases.append(basecase+'_'+modelst.replace('1850','20TR')+'_aCO2')
                   cases.append(basecase+'_'+modelst.replace('1850','20TR')+'_eCO2')
 
-            job_depend_run=''    
+            job_depend_run=''
             if (len(cases) > 1 and options.constraints != ''):
               cases=[]    #QPSO will run all cases
               #if (options.crop or options.fates):

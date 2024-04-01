@@ -339,9 +339,7 @@ parser.add_option("--landusefile", dest="pftdynfile", default='', \
                   help='user-defined dynamic PFT file')
 parser.add_option("--var_list_pft", dest="var_list_pft", default="",help='Comma-separated list of vars to output at PFT level')
 
-#Add topounits:
-parser.add_option("--topounits", dest="topounits", default=False, \
-                  help="Turn on topounits > 1", action='store_true')
+#Add topounit downscaling options:
 parser.add_option("--topounits_atmdownscale", dest = "topounits_atmdownscale", default=False, \
                   help="Use atmospheric downscaling in topounits", action='store_true')
 parser.add_option("--topounits_raddownscale", dest = "topounits_raddownscale", default=False, \
@@ -372,7 +370,7 @@ if (options.makepointdata_only):
 elif(options.domainfile!="" and options.surffile!="" and \
     (options.nopftdyn or options.pftdynfile!="")):
     options.nopointdata = True
-    
+
 
 #Set default model root
 if (options.csmdir == ''):
@@ -437,7 +435,7 @@ PTCLMdir = os.getcwd()
 
 #set model if not specified
 if (options.mymodel == ''):
-  if ('clm5' in options.csmdir): 
+  if ('clm5' in options.csmdir):
       options.mymodel = 'CLM5'
   elif ('E3SM' in options.csmdir or 'e3sm' in options.csmdir or 'ACME' in options.csmdir):
       options.mymodel = 'ELM'
@@ -557,14 +555,14 @@ if (options.finidat == ''  and options.finidat_case == ''):  #not user-defined
 
         if (options.finidat_year == -1):
             finidat_year = int(options.ny_ad)+1
-    
+
     if (compset == "I20TRCLM45"+mybgc or compset == "I20TRCRUCLM45"+mybgc):
         if (options.mycaseid != ''):
             options.finidat_case = options.mycaseid+'_'+options.site+ \
                 '_I1850CLM45'+mybgc
         else:
             options.finidat_case = options.site + '_I1850CLM45'+mybgc
-            
+
         if (options.finidat_year == -1):
             finidat_year=1850
     if (compset == "I20TR"+mybgc):
@@ -596,7 +594,7 @@ if (options.finidat_case != ''):
 if (options.finidat != ''):
     finidat = options.finidat
     finidat_year = int(finidat[-19:-15])
-    finidat_yst = str(10000+finidat_year)    
+    finidat_yst = str(10000+finidat_year)
 
 #construct default casename
 casename    = options.site+"_"+compset
@@ -623,7 +621,7 @@ if (options.exit_spinup):
     casename = casename+'_exit_spinup'
 if (options.istrans and not "20TR" in compset):
     casename = casename+'_trans'
-if (options.transtag != ""): 
+if (options.transtag != ""):
     casename = casename+'_'+options.transtag
 
 PTCLMfiledir = options.ccsm_input+'/lnd/clm2/PTCLM'
@@ -640,7 +638,7 @@ else:
 print('Machine is: '+options.machine)
 #Check for existing case directory
 if (os.path.exists(casedir)):
-    
+
     print('Warning:  Case directory exists')
     if (options.rmold):
         print('--rmold specified.  Removing old case ')
@@ -650,7 +648,7 @@ if (os.path.exists(casedir)):
         if var[0] == 'r':
             os.system('rm -rf '+casedir)
         if var[0] == 'x':
-            sys.exit(1)    
+            sys.exit(1)
 print("CASE directory is: "+casedir)
 
 #Construct case build and run directory
@@ -702,7 +700,7 @@ if (options.nopointdata == False):
         ptcmd = ptcmd + ' --crop'
     if (isglobal):
         ptcmd = ptcmd + ' --res '+options.res
-        
+
         # if using global dataset to extract for running at a list of grid-points
         if (options.point_list != ''):
             ptcmd = ptcmd+' --point_list '+options.point_list
@@ -758,7 +756,7 @@ if (options.nopointdata == False):
                     n=n+1
             os.system('sleep 10')
         #Clean up
-        os.system('rm makepointdata_rhea*') 
+        os.system('rm makepointdata_rhea*')
     else:
         print(ptcmd)
         result = os.system(ptcmd)
@@ -948,7 +946,7 @@ if (options.parm_file != ''):
                     else:
                         print('No PFT specified. Assuming universal parameter')
                         os.system(myncap+' -O -s "%s = q10_mr*0+%s" '%(values[0],values[2])+tmpdir+'/clm_params.nc '+tmpdir+'/clm_params.nc')
-               
+
     input.close()
 
 if (options.parm_vals != ''):
@@ -960,14 +958,14 @@ if (options.parm_vals != ''):
         thisvar = nffun.getvar(pftfile, parm_data[0])
         if (len(parm_data) == 2):
             thisvar[...] = float(parm_data[1])
-        elif (len(parm_data) == 3): 
+        elif (len(parm_data) == 3):
            if (float(parm_data[1]) >= 0):
                thisvar[int(parm_data[1])] = float(parm_data[2])
-           else: 
+           else:
                thisvar[...] = float(parm_data[2])
         ierr =  nffun.putvar(pftfile, parm_data[0], thisvar)
-           
-#parameter (soil order dependent) modifications if desired    ::X.YANG 
+
+#parameter (soil order dependent) modifications if desired    ::X.YANG
 if (options.mymodel == 'ELM'):
     if (options.mod_parm_file_P != ''):
         os.system('cp '+options.mod_parm_file_P+' '+tmpdir+'/CNP_parameters.nc')
@@ -1059,7 +1057,7 @@ os.system('./xmlchange RUNDIR='+rundir)
 os.system('./xmlchange DOUT_S=TRUE')
 os.system('./xmlchange DOUT_S_ROOT='+runroot+'/archive/'+casename)
 os.system('./xmlchange DIN_LOC_ROOT='+options.ccsm_input)
-os.system('./xmlchange DIN_LOC_ROOT_CLMFORC='+options.ccsm_input+'/atm/datm7/')    
+os.system('./xmlchange DIN_LOC_ROOT_CLMFORC='+options.ccsm_input+'/atm/datm7/')
 
 #define mask and resoultion
 if (isglobal == False):
@@ -1090,7 +1088,7 @@ else:
   os.system('./xmlchange LND_DOMAIN_FILE='+domainfile)
 
 #turn off archiving
-os.system('./xmlchange DOUT_S=FALSE') 
+os.system('./xmlchange DOUT_S=FALSE')
 #datm options
 if (not cpl_bypass):
     if (use_reanalysis):
@@ -1100,7 +1098,7 @@ if (not cpl_bypass):
           os.system('./xmlchange DATM_MODE=CLMGSWP3v1')
     else:
         if (isglobal == False):
-            os.system('./xmlchange DATM_MODE=CLM1PT') 
+            os.system('./xmlchange DATM_MODE=CLM1PT')
     os.system('./xmlchange DATM_CLMNCEP_YR_START='+str(startyear))
     os.system('./xmlchange DATM_CLMNCEP_YR_END='+str(endyear))
     if (options.align_year == -999):
@@ -1128,7 +1126,7 @@ if ('20TR' in compset or options.istrans):
     os.system('./xmlchange '+mylsm+'_CO2_TYPE=diagnostic')
     if (options.run_startyear == -1):
         os.system('./xmlchange RUN_STARTDATE=1850-01-01')
-    
+
 #No pnetcdf for small cases on compy
 if (('docker' in options.machine or 'compy' in options.machine or 'ees' in options.machine) and int(options.np) < 80):
   os.system('./xmlchange PIO_TYPENAME=netcdf')
@@ -1166,7 +1164,7 @@ if (options.maxpatch_pft != 17):
   os.system("./xmlchange --id CLM_BLDNML_OPTS --val '" + xval + "'")
 
 # for spinup and transient runs, PIO_TYPENAME is pnetcdf, which now not works well
-if('mac' in options.machine or 'cades' in options.machine): 
+if('mac' in options.machine or 'cades' in options.machine):
     os.system("./xmlchange --id PIO_TYPENAME --val netcdf ")
 
 
@@ -1180,7 +1178,7 @@ if (options.clean_config):
     os.system('rm -f Macro')
     os.system('rm -f user-nl-*')
 
-# Add options for FFLAGS to Macros file here 
+# Add options for FFLAGS to Macros file here
 
 #clm namelist modifications
 for i in range(1,int(options.ninst)+1):
@@ -1201,7 +1199,7 @@ for i in range(1,int(options.ninst)+1):
         namelist_in = open(PTCLMdir+'/'+options.namelist_file,'r')
       elif (os.path.isfile(options.namelist_file)):
         namelist_in = open(options.namelist_file,'r')
-      else: 
+      else:
         print('Error:  namelist_file does not exist.  Aborting')
         sys.exit(1)
       for s in namelist_in:
@@ -1227,7 +1225,7 @@ for i in range(1,int(options.ninst)+1):
             'CPOOL_TO_LIVESTEMC_STORAGE', 'CPOOL_TO_DEADCROOTC_STORAGE', 'CPOOL_TO_LIVECROOTC_STORAGE', \
             'ER', 'HR', 'FROOTC_STORAGE', 'LEAFC_STORAGE', 'LEAFC_XFER', 'FROOTC_XFER', 'LIVESTEMC_XFER', \
             'DEADSTEMC_XFER', 'LIVECROOTC_XFER', 'DEADCROOTC_XFER', 'SR', 'HR_vr', 'FIRA', 'CPOOL_TO_LIVESTEMC', 'TOTLITC', 'TOTSOMC'])
-    #var_list_hourly_bgc 
+    #var_list_hourly_bgc
     var_list_daily = ['TLAI','SNOWDP','H2OSFC','ZWT']
     if ('RD' in compset or 'ECA' in compset):
       var_list_daily.extend(['TOTLITC', 'TOTSOMC', 'CWDC', 'LITR1C_vr', 'LITR2C_vr', 'LITR3C_vr', 'SOIL1C_vr', \
@@ -1344,7 +1342,7 @@ for i in range(1,int(options.ninst)+1):
           myline = myline+"'"+v.strip()+"'"
         myline=myline+"\n"
         output.write(myline+"\n")
-   
+
     if (options.spinup_vars and (not '20TR' in compset) and (not options.istrans)):
         output.write(" hist_empty_htapes = .true.\n")
         h0varst = " hist_fincl1 = "
@@ -1418,18 +1416,14 @@ for i in range(1,int(options.ninst)+1):
     if (options.surffile == ''):
       output.write(" fsurdat = '"+rundir+"/surfdata.nc'\n")
     else:
-      output.write(" fsurdat = '"+options.surffile+"'\n")      
-    
+      output.write(" fsurdat = '"+options.surffile+"'\n")
+
     if (options.var_soilthickness):
         output.write(" use_var_soil_thick = .TRUE.\n")
-    if (options.topounits):
-        output.write(" fsurdat = '/project/neon_e3sm/inputdata/lnd/clm2/surfdata/half_degree_merge_surfdata_0.5x0.5_simyr2000_c190418.with_aveDTB.20201222.nc'\n")
-        if (options.topounits_atmdownscale):
-            output.write(" use_atm_downscaling_to_topunit = .true.\n")
-        else: # needed? maybe not.
-            output.write(" use_atm_downscaling_to_topunit = .false.\n")
-        if (options.topounits_raddownscale):
-            output.write(" use_top_solar_rad = .true.\n")
+    if (options.topounits_atmdownscale):
+        output.write(" use_atm_downscaling_to_topunit = .true.\n")
+    if (options.topounits_raddownscale):
+        output.write(" use_top_solar_rad = .true.\n")
     if (options.no_budgets):
         output.write(" do_budgets = .false.\n")
     # snow options
@@ -1443,7 +1437,7 @@ for i in range(1,int(options.ninst)+1):
     #pft dynamics file for transient run
     if ('20TR' in compset or options.istrans):
         if (options.nopftdyn):
-            output.write(" flanduse_timeseries = ' '\n") 
+            output.write(" flanduse_timeseries = ' '\n")
         elif(options.pftdynfile !=''):
             output.write(" flanduse_timeseries = '"+options.pftdynfile+"'\n")
         else:
@@ -1476,8 +1470,8 @@ for i in range(1,int(options.ninst)+1):
         else:
           output.write( " stream_fldfilename_ndep = '"+options.ccsm_input+ \
             "/lnd/clm2/ndepdata/fndep_clm_rcp4.5_simyr1849-2106_1.9x2.5_c100428.nc'\n")
-        if (model_name == 'clm2'):  #set for older tags/branches (option was removed, this may not capture all tags 
-                                    #between rename to elm and removal of nitrif_dentrif)   
+        if (model_name == 'clm2'):  #set for older tags/branches (option was removed, this may not capture all tags
+                                    #between rename to elm and removal of nitrif_dentrif)
             output.write(" use_nitrif_denitrif = .true.\n")
         if (options.vsoilc):
             output.write(" use_vertsoilc = .true.\n")
@@ -1498,12 +1492,12 @@ for i in range(1,int(options.ninst)+1):
 #        if (options.CH4 and options.fates_nutrient == ''):
 #            output.write(" use_lch4 = .true.\n")
 #        elif (options.fates_nutrient != ''):
-#            output.write(" use_lch4 = .false.\n")  
+#            output.write(" use_lch4 = .false.\n")
         if (options.CH4):
             output.write(" use_lch4 = .true.\n")
         # APW: given RK suggests nitrif/denitrif is not correct w/o ch4 shuld this be for all nutrient enabled runs?
         elif (options.fates_nutrient != ''):
-            output.write(" use_lch4 = .true.\n")  
+            output.write(" use_lch4 = .true.\n")
         if (options.nofire):
             output.write(" use_nofire = .true.\n")
         if (options.C13):
@@ -1631,7 +1625,7 @@ for i in range(1,int(options.ninst)+1):
         else:
           output.write(" aero_file = '"+options.ccsm_input+"/atm/cam/chem/" \
                          +"trop_mozart_aero/aero/aerosoldep_rcp4.5_monthly_1849-2104_1.9x2.5_c100402.nc'\n")
-    
+
     if (options.addt != 0):
       output.write(" add_temperature = "+str(options.addt)+"\n")
       output.write(" startdate_add_temperature = '"+str(options.sd_addt)+"'\n")
@@ -1717,7 +1711,7 @@ if (options.srcmods_loc != ''):
 if (options.caseroot == './' ):
     os.chdir(csmdir+"/cime/scripts/"+casename)
 else:
-    os.chdir(casedir)       
+    os.chdir(casedir)
 
 os.system('mkdir Srcfiles')
 #clean build if requested
@@ -1728,7 +1722,7 @@ if (options.no_build == False):
     print('Running case.build')
     if ('edison' in options.machine or 'titan' in options.machine):
         #send output to screen since build times are very slow
-        result = os.system('./case.build') 
+        result = os.system('./case.build')
     else:
         result = os.system('./case.build > case_build.log')
     if (result > 0):
@@ -1743,7 +1737,7 @@ else:
 if (options.caseroot == ''):
     os.chdir(csmdir+"/cime/scripts/"+casename)
 else:
-    os.chdir(casedir) 
+    os.chdir(casedir)
 
 #stream file modifications for site runs
 #Datm mods/ transient CO2 patch for transient run (datm buildnml mods)
@@ -1778,7 +1772,7 @@ if (not cpl_bypass):
                                    ' '+str(startyear)+' '+str(endyear)+'  ", '+ \
                                    '"datm.streams.txt.CLMGSWP3v1.TPQW '+str(myalign_year)+ \
                                    ' '+str(startyear)+' '+str(endyear)+'  ", '+mypresaero+myco2+ \
-                                   ', "datm.streams.txt.topo.observed 1 1 1"\n') 
+                                   ', "datm.streams.txt.topo.observed 1 1 1"\n')
             else:
                 myoutput.write(' streams = "datm.streams.txt.CLM1PT.'+mylsm+'_USRDAT '+str(myalign_year)+ \
                                    ' '+str(startyear)+' '+str(endyear)+'  ", '+mypresaero+myco2+ \
@@ -1899,20 +1893,20 @@ if ((options.ensemble_file != '' or int(options.mc_ensemble) != -1) and (options
                     else:
                         param_min.append(float(s.split()[2]))
                         param_max.append(float(s.split()[3]))
-        input.close() 
+        input.close()
         n_parameters = len(param_names)
-    if (options.ensemble_file != ''):    
+    if (options.ensemble_file != ''):
         if (not os.path.isfile(options.ensemble_file)):
             print('Error:  ensemble file does not exist')
             sys.exit(1)
 
-        samples=numpy.zeros((n_parameters,100000), dtype=numpy.float) 
+        samples=numpy.zeros((n_parameters,100000), dtype=numpy.float)
         #get parameter samples and information
         myinput=open(options.ensemble_file)
         nsamples = 0
         for s in myinput:
             for j in range(0,n_parameters):
-                samples[j][nsamples] = float(s.split()[j]) 
+                samples[j][nsamples] = float(s.split()[j])
             nsamples=nsamples+1
         myinput.close()
     elif (int(options.mc_ensemble) > 0):
@@ -1926,17 +1920,17 @@ if ((options.ensemble_file != '' or int(options.mc_ensemble) != -1) and (options
 
     print('')
     print('')
-    print('Parameter ensembles selected:') 
-    print(str(n_parameters)+' parameters are being modified') 
+    print('Parameter ensembles selected:')
+    print(str(n_parameters)+' parameters are being modified')
     print(str(nsamples)+' parameter samples provided')
-  
+
     #total number of processors required in each pbs script
     np_total = int(options.np)*int(options.ng)
     #number of scripts required
     n_scripts = int(math.ceil(nsamples/float(options.ninst*options.ng)))
- 
+
     num=0
-    #Launch ensemble if requested 
+    #Launch ensemble if requested
     mysubmit_type = 'qsub'
     if ('cades' in options.machine or 'compy' in options.machine or 'ubuntu' in options.machine or 'cori' in options.machine or \
         options.machine == 'anvil' or options.machine == 'edison' or options.machine == 'chrysalis'):
@@ -2052,7 +2046,7 @@ if ((options.ensemble_file != '' or int(options.mc_ensemble) != -1) and (options
                ' --site '+options.site+' --model_name '+model_name
         if (options.constraints != ''):
             cmd = cmd + ' --constraints '+options.constraints
-        if (options.postproc_file != ''): 
+        if (options.postproc_file != ''):
             cmd = cmd + ' --postproc_file '+options.postproc_file
         if (options.spruce_treatments):
             cmd = cmd + ' --spruce_treatments'
