@@ -74,10 +74,6 @@ parser.add_option("--compset", dest="compset", default='I1850CNPRDCTCBC', \
                   help = "component set to use (required)\n"
                          "Currently supports ONLY *CLM45(CN) compsets")
 
-
-
-
-
 parser.add_option("--istrans", dest="istrans", default=False, action="store_true",\
                  help="Force compset to act like transient")
 parser.add_option("--lat_bounds", dest="lat_bounds", default='-999,-999', \
@@ -339,7 +335,8 @@ parser.add_option("--landusefile", dest="pftdynfile", default='', \
                   help='user-defined dynamic PFT file')
 parser.add_option("--var_list_pft", dest="var_list_pft", default="",help='Comma-separated list of vars to output at PFT level')
 
-#Add topounit downscaling options:
+#NGEE Options
+#topounits:
 parser.add_option("--topounits_atmdownscale", dest = "topounits_atmdownscale", default=False, \
                   help="Use atmospheric downscaling in topounits", action='store_true')
 parser.add_option("--topounits_raddownscale", dest = "topounits_raddownscale", default=False, \
@@ -351,6 +348,9 @@ parser.add_option("--no_snicar_ad", dest="no_snicar_ad", default=False, \
                   help = "Turn off SNICAR-AD snow microphysics model", action = "store_true")
 parser.add_option("--use_extra_snow_layers", dest = "use_extra_snow_layers", default=False, \
                   help = "Turn on extra snow layers", action="store_true")
+# polygonal tundra:
+parser.add_option("--use_polygonal_tundra", dest="use_polygonal_tundra", default=False, \
+                  help= "Turn on the polygonal tundra parameterizations, NGEE Arctic Phase 3 IM1", action="store_true")
 #CI testing:
 parser.add_option("--test", dest = "test_mode", default=False,
                   help = "Run in test mode? (5 day simulation)", action = "store_true")
@@ -1433,6 +1433,8 @@ for i in range(1,int(options.ninst)+1):
         output.write(" use_snicar_ad = .false.\n")
     if (options.use_extra_snow_layers):
         output.write(" use_extrasnowlayers = .true.\n")
+    if (options.use_polygonal_tundra):
+        output.write(" use_polygonal_tundra = .true.\n")
 
     #pft dynamics file for transient run
     if ('20TR' in compset or options.istrans):

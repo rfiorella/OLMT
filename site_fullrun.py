@@ -242,6 +242,7 @@ parser.add_option("--maxpatch_pft", dest="maxpatch_pft", default=17, \
 parser.add_option("--landusefile", dest="pftdynfile", default='', \
                   help='user-defined dynamic PFT file')
 
+# NGEE Arctic Options
 #snow options
 parser.add_option("--dust_snow_mixing", dest="dust_snow_mixing", default=False, \
                   help = "Use Hao et al. dust/snow mixing albedo parameterization", action="store_true")
@@ -249,11 +250,14 @@ parser.add_option("--no_snicar_ad", dest="no_snicar_ad", default=False, \
                   help = "Turn off SNICAR-AD snow microphysics model", action = "store_true")
 parser.add_option("--use_extra_snow_layers", dest = "use_extra_snow_layers", default=False, \
                   help = "Turn on extra snow layers", action="store_true")
-#topounits (does this do anything for single cells?)
+#topounits 
 parser.add_option("--topounits_atmdownscale", dest = "topounits_atmdownscale", default=False,
                   help="Use atmospheric downscaling in topounits", action='store_true')
 parser.add_option("--topounits_raddownscale", dest = "topounits_raddownscale", default=False,
                   help="Use radiation downscaling in topounits", action='store_true')
+# polygonal tundra:
+parser.add_option("--use_polygonal_tundra", dest="use_polygonal_tundra", default=False, \
+                  help= "Turn on the polygonal tundra parameterizations, NGEE Arctic Phase 3 IM1", action="store_true")
 
 
 parser.add_option("--var_list_pft", dest="var_list_pft", default="",help='Comma-separated list of vars to output at PFT level')
@@ -698,7 +702,10 @@ for row in AFdatareader:
             basecmd = basecmd + ' --topounits_atmdownscale'
         if (options.topounits_raddownscale):
             basecmd = basecmd + ' --topounits_raddownscale'
-
+        # polygonal tundra
+        if (options.use_polygonal_tundra):
+            basecmd = basecmd + ' --use_polygonal_tundra'
+       
 #---------------- build commands for runcase.py -----------------------------
 
         # define compsets
