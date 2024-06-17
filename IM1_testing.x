@@ -30,7 +30,7 @@ set case=1
 
 if ($case == 1) then
   python3 ./site_fullrun.py --compiler gnu --mpilib openmpi --machine ees \
-         --site AK-ICP --sitegroup NGEEArctic --caseidprefix ICP-nopolygon --cpl_bypass --gswp3 --daymet4 \
+         --site AK-ICP --sitegroup NGEEArctic --caseidprefix ICP-baseline --cpl_bypass --gswp3 --daymet4 \
          --domainfile /project/neon_e3sm/inputdata/share/domains/domain.clm/ngee-arctic-development/IcyCape_domain.nc \
          --surffile /project/neon_e3sm/inputdata/lnd/clm2/surfdata_map/ngee-arctic-development/IM1/IcyCape/IcyCape_surfdata.nc \
          --landusefile /project/neon_e3sm/inputdata/lnd/clm2/surfdata_map/ngee-arctic-development/IM1/IcyCape/IcyCape_surfdata.pftdyn.nc \
