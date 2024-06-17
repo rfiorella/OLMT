@@ -5,11 +5,11 @@
 # case 2: negative control case, uses version of E3SM with IM1 updates
 #	  but they are turned off (should be identical results to case 1)
 # case 3: High centered polygon test case, polygonal tundra IM1 updates have been
-	  turned on and new surface file assumes polygonal ground is 100% HCP
+#	  turned on and new surface file assumes polygonal ground is 100% HCP
 # case 4: Flat centered polygon test case, polygonal tundra IM1 updates have been
-	  turned on and new surface file assumes polygonal ground is 100% FCP
+#	  turned on and new surface file assumes polygonal ground is 100% FCP
 # case 5: Low centered polygon test case, polygonal tundra IM1 updates have been
-	  turned on and new surface file assumes polygonal ground is 100% LCP
+#	  turned on and new surface file assumes polygonal ground is 100% LCP
 #------------------------------------------------------------
 # PREREQUISITES:
 # NOTE: YOU WILL NEED TO RUN THE COMMANDS IN THIS BLOCK
