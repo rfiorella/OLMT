@@ -487,6 +487,8 @@ for row in AFdatareader:
             endyear_trans=2016
           elif (options.gswp3):
             endyear_trans=2014
+            if (options.use_polygonal_tundra):
+                endyear_trans=2109
           elif (options.gswp3_w5e5):
             endyear_trans=2019
           elif (options.princeton):
