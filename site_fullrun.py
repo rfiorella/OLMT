@@ -250,7 +250,7 @@ parser.add_option("--no_snicar_ad", dest="no_snicar_ad", default=False, \
                   help = "Turn off SNICAR-AD snow microphysics model", action = "store_true")
 parser.add_option("--use_extra_snow_layers", dest = "use_extra_snow_layers", default=False, \
                   help = "Turn on extra snow layers", action="store_true")
-#topounits 
+#topounits
 parser.add_option("--topounits_atmdownscale", dest = "topounits_atmdownscale", default=False,
                   help="Use atmospheric downscaling in topounits", action='store_true')
 parser.add_option("--topounits_raddownscale", dest = "topounits_raddownscale", default=False,
@@ -258,6 +258,9 @@ parser.add_option("--topounits_raddownscale", dest = "topounits_raddownscale", d
 # polygonal tundra:
 parser.add_option("--use_polygonal_tundra", dest="use_polygonal_tundra", default=False, \
                   help= "Turn on the polygonal tundra parameterizations, NGEE Arctic Phase 3 IM1", action="store_true")
+# cold initialization:
+parser.add_option("--use_arctic_init", dest = "use_arctic_init", default = False, \
+                  help = "Use colder and saturated initial conditions, NGEE Arctic IM2 and IM0", action="store_true")
 
 
 parser.add_option("--var_list_pft", dest="var_list_pft", default="",help='Comma-separated list of vars to output at PFT level')
@@ -707,7 +710,9 @@ for row in AFdatareader:
         # polygonal tundra
         if (options.use_polygonal_tundra):
             basecmd = basecmd + ' --use_polygonal_tundra'
-       
+        if (options.use_arctic_init):
+            basecmd = basecmd + ' --use_arctic_init'
+
 #---------------- build commands for runcase.py -----------------------------
 
         # define compsets
