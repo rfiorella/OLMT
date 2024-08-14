@@ -1304,7 +1304,14 @@ for i in range(1,int(options.ninst)+1):
 
     if (options.hist_nhtfrq != -999 and not options.diags):
         if (options.ad_spinup):
-            output.write(" hist_nhtfrq = "+ str(options.hist_nhtfrq)+", "+str(options.hist_nhtfrq)+"\n")
+            if (options.dailyrunoff and options.use_polygonal_tundra):
+                output.write(" hist_nhtfrq = "+ str(options.hist_nhtfrq)+", "+ str(options.hist_nhtfrq)+", -24\n")
+                output.write(" hist_fincl3 = 'TBOT','QBOT','RAIN','SNOW','QBOT','PBOT','WIND','FPSN','QVEGT'," \
+                        +"'QVEGE','QSOIL','QRUNOFF','QDRAI','QOVER','H2OSFC','ZWT','SNOWDP','H2OSOI','TSOI','TWS'," \
+                        +"'FSDS','FLDS','ALT','ALTMAX_EVER','SNOW_DEPTH','SOILICE','SOILLIQ','ZWT','ZWT_PERCH'," \
+                        +"'QDRAI_PERCH','QH2OSFC','FH2OSFC','FINUNDATED','SUBSIDENCE','MICROREL','DEPRESS_DEPTH','EXCLUDED_VOL'\n")
+            else:
+                output.write(" hist_nhtfrq = "+ str(options.hist_nhtfrq)+", "+str(options.hist_nhtfrq)+"\n")
         else:
             if (options.dailyvars):
                 output.write(" hist_nhtfrq = "+ str(options.hist_nhtfrq)+",-24,-24\n")
@@ -1318,11 +1325,17 @@ for i in range(1,int(options.ninst)+1):
                     h2varst = h2varst+"'"+str(v)+"',"
                 output.write(h1varst[:-1]+"\n")
                 output.write(h2varst[:-1]+"\n")
-            elif (options.dailyrunoff):
+            elif (options.dailyrunoff and not options.use_polygonal_tundra):
                 output.write(" hist_nhtfrq = "+ str(options.hist_nhtfrq)+",-24\n")
                 output.write(" hist_fincl2 = 'TBOT','QBOT','RAIN','SNOW','QBOT','PBOT','WIND','FPSN','QVEGT'," \
                         +"'QVEGE','QSOIL','QRUNOFF','QDRAI','QOVER','H2OSFC','ZWT','SNOWDP','H2OSOI','TSOI','TWS'," \
                         +"'FSDS','FLDS'\n")
+            elif (options.dailyrunoff and options.use_polygonal_tundra):
+                output.write(" hist_nhtfrq = "+ str(options.hist_nhtfrq)+",-24\n")
+                output.write(" hist_fincl2 = 'TBOT','QBOT','RAIN','SNOW','QBOT','PBOT','WIND','FPSN','QVEGT'," \
+                        +"'QVEGE','QSOIL','QRUNOFF','QDRAI','QOVER','H2OSFC','ZWT','SNOWDP','H2OSOI','TSOI','TWS'," \
+                        +"'FSDS','FLDS','ALT','ALTMAX','SNOW_DEPTH','SOILICE','SOILLIQ','ZWT','ZWT_PERCH'," \
+                        +"'QDRAI_PERCH','QH2OSFC','FH2OSFC','FINUNDATED','SUBSIDENCE','MICROREL','DEPRESS_DEPTH','EXCLUDED_VOL'\n")
             else:
                 output.write(" hist_nhtfrq = "+ str(options.hist_nhtfrq)+"\n")
 

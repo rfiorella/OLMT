@@ -231,6 +231,8 @@ parser.add_option("--hist_nhtfrq_trans", dest="hist_nhtfrq", default="-24", \
                   help = 'output file timestep (transient only)')
 parser.add_option("--spinup_vars", dest = "spinup_vars", default=False, action="store_true", \
                   help = "limit output variables for spinup")
+parser.add_option("--dailyrunoff", dest = "dailyrunoff", default=False, action="store_true", \
+                  help = "Turn on hydrological terms for analyzing hydrology")
 parser.add_option("--hist_mfilt_spinup", dest="hist_mfilt_spinup", default="-999", \
                   help = 'number of output timesteps per file (spinup only)')
 parser.add_option("--hist_nhtfrq_spinup", dest="hist_nhtfrq_spinup", default="-999", \
@@ -813,6 +815,8 @@ for row in AFdatareader:
             cmd_adsp = cmd_adsp+' --makemetdat'
         if (options.spinup_vars):
             cmd_adsp = cmd_adsp+' --spinup_vars'
+        if (options.dailyrunoff):
+            cmd_adsp = cmd_adsp+' --dailyrunoff'
         if (mycaseid != ''):
             ad_case = mycaseid+'_'+ad_case
         if (sitenum == 0 and options.exeroot == ''):
