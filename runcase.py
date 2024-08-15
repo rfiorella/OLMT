@@ -1309,7 +1309,7 @@ for i in range(1,int(options.ninst)+1):
                 output.write(" hist_fincl3 = 'TBOT','QBOT','RAIN','SNOW','QBOT','PBOT','WIND','FPSN','QVEGT'," \
                         +"'QVEGE','QSOIL','QRUNOFF','QDRAI','QOVER','H2OSFC','ZWT','SNOWDP','H2OSOI','TSOI','TWS'," \
                         +"'FSDS','FLDS','ALT','ALTMAX_EVER','SNOW_DEPTH','SOILICE','SOILLIQ','ZWT','ZWT_PERCH'," \
-                        +"'QDRAI_PERCH','QH2OSFC','FH2OSFC','FINUNDATED','SUBSIDENCE','MICROREL','DEPRESS_DEPTH','EXCLUDED_VOL'\n")
+                        +"'QDRAI_PERCH','QH2OSFC','FH2OSFC','FINUNDATED','SUBSIDENCE','MICROREL','DEPRESS_DEPTH','EXCESS_ICE','EXCLUDED_VOL'\n")
             else:
                 output.write(" hist_nhtfrq = "+ str(options.hist_nhtfrq)+", "+str(options.hist_nhtfrq)+"\n")
         else:
