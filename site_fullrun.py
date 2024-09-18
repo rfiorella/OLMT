@@ -250,8 +250,8 @@ parser.add_option("--dust_snow_mixing", dest="dust_snow_mixing", default=False, 
                   help = "Use Hao et al. dust/snow mixing albedo parameterization", action="store_true")
 parser.add_option("--no_snicar_ad", dest="no_snicar_ad", default=False, \
                   help = "Turn off SNICAR-AD snow microphysics model", action = "store_true")
-parser.add_option("--use_extra_snow_layers", dest = "use_extra_snow_layers", default=False, \
-                  help = "Turn on extra snow layers", action="store_true")
+parser.add_option("--use_firn_percol", dest = "use_firn_percolation_and_compaction", default=False, \
+                  help = "Turn on firn percolation and compaction", action="store_true")
 #topounits
 parser.add_option("--topounits_atmdownscale", dest = "topounits_atmdownscale", default=False,
                   help="Use atmospheric downscaling in topounits", action='store_true')
@@ -700,8 +700,8 @@ for row in AFdatareader:
         # snow opts
         if (options.dust_snow_mixing):
             basecmd = basecmd + ' --dust_snow_mixing'
-        if (options.use_extra_snow_layers):
-            basecmd = basecmd + ' --use_extra_snow_layers'
+        if (options.use_firn_percolation_and_compaction):
+            basecmd = basecmd + ' --use_firn_percolation_and_compaction'
         if (options.no_snicar_ad):
             basecmd = basecmd + ' --no_snicar_ad'
         # topounits

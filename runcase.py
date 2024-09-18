@@ -346,8 +346,8 @@ parser.add_option("--dust_snow_mixing", dest="dust_snow_mixing", default=False, 
                   help = "Use Hao et al. dust/snow mixing albedo parameterization", action="store_true")
 parser.add_option("--no_snicar_ad", dest="no_snicar_ad", default=False, \
                   help = "Turn off SNICAR-AD snow microphysics model", action = "store_true")
-parser.add_option("--use_extra_snow_layers", dest = "use_extra_snow_layers", default=False, \
-                  help = "Turn on extra snow layers", action="store_true")
+parser.add_option("--use_firn_percolation_and_compaction", dest = "use_firn_percolation_and_compaction", default=False, \
+                  help = "Turn on new firn percolation and compaction routines", action="store_true")
 # polygonal tundra:
 parser.add_option("--use_polygonal_tundra", dest="use_polygonal_tundra", default=False, \
                   help= "Turn on the polygonal tundra parameterizations, NGEE Arctic Phase 3 IM1", action="store_true")
@@ -1447,8 +1447,8 @@ for i in range(1,int(options.ninst)+1):
         output.write(" use_dust_snow_internal_mixing = .true.\n")
     if (options.no_snicar_ad):
         output.write(" use_snicar_ad = .false.\n")
-    if (options.use_extra_snow_layers):
-        output.write(" use_extrasnowlayers = .true.\n")
+    if (options.use_firn_percolation_and_compaction):
+        output.write(" use_firn_percolation_and_compaction = .true.\n")
     if (options.use_polygonal_tundra):
         output.write(" use_polygonal_tundra = .true.\n")
     if (options.use_arctic_init):

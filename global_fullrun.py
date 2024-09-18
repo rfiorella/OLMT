@@ -100,7 +100,7 @@ parser.add_option("--landusefile", dest="pftdynfile", default='', \
 parser.add_option("--parm_file", dest="parm_file", default="", \
                   help = 'parameter file to use')
 parser.add_option("--parm_file_P", dest="parm_file_P", default="", \
-                  help = 'P parameter file to use')               
+                  help = 'P parameter file to use')
 parser.add_option("--parm_vals", dest="parm_vals", default="", \
                   help = 'User specified parameter values')
 parser.add_option("--pft", dest="mypft", default=-1, \
@@ -190,8 +190,8 @@ parser.add_option("--dust_snow_mixing", dest="dust_snow_mixing", default=False, 
                   help = "Use Hao et al. dust/snow mixing albedo parameterization", action="store_true")
 parser.add_option("--no_snicar_ad", dest="no_snicar_ad", default=False, \
                   help = "Turn off SNICAR-AD snow microphysics model", action = "store_true")
-parser.add_option("--use_extra_snow_layers", dest = "use_extra_snow_layers", default=False, \
-                  help = "Turn on extra snow layers", action="store_true")
+parser.add_option("--use_firn_percolation_and_compaction", dest = "use_firn_percolation_and_compaction", default=False, \
+                  help = "Turn on firn percolation and compaction", action="store_true")
 
 (options, args) = parser.parse_args()
 
@@ -291,7 +291,7 @@ if (options.makepointdata_only): # don't configure/build/run model
     options.nofn = True
     options.notrans = True
     options.nopointdata = False
-    
+
 print(options.machine)
 #default compilers
 if (options.compiler == ''):
@@ -301,15 +301,15 @@ if (options.compiler == ''):
         options.compiler = 'intel'
     if (options.machine == 'cades'):
         options.compiler = 'gnu'
-    if (options.machine == 'compy'): 
+    if (options.machine == 'compy'):
         options.compiler = 'intel'
     if (options.machine == 'ees'):
         options.compiler = 'gnu'
 
 #default MPIlibs
-if (options.mpilib == ''):    
+if (options.mpilib == ''):
     if ('cori' in options.machine or 'edison' in options.machine):
-        options.mpilib = 'mpt'  
+        options.mpilib = 'mpt'
     elif ('cades' in options.machine):
         options.mpilib = 'openmpi'
     elif ('anvil' in options.machine):
@@ -368,14 +368,14 @@ myuser = getpass.getuser()
 myproject=''
 if (options.project != ''):
   myproject = options.project
-else: 
+else:
   if (os.path.exists(os.environ.get('HOME')+'/.cesm_proj')):
     print('Getting project from '+os.environ.get('HOME')+'/.cesm_proj')
     myinput = open(os.environ.get('HOME')+'/.cesm_proj','r')
     for s in myinput:
         myproject=s[:-1]
     print('Project = '+myproject)
- 
+
 #case run and case root directories
 if (options.runroot == ''):
     if (options.machine == 'titan' or options.machine == 'eos'):
@@ -403,7 +403,7 @@ if (options.cruncep or options.cruncepv8 or options.gswp3 or options.princeton o
     if (options.cruncep):
        site_endyear = 2013
     elif (options.cruncepv8):
-       site_endyear = 2016   
+       site_endyear = 2016
     elif (options.gswp3):
        site_endyear = 2010
     elif (options.princeton):
@@ -447,9 +447,9 @@ if (translen == -1):
 
 fsplen = int(ny_fin)
 #if (options.sp):
-#    #no spinup, just run over 
+#    #no spinup, just run over
 #    fsplen = site_endyear-startyear+1
- 
+
 #get align_year
 print(endyear)
 year_align = (endyear-1850+1) % ncycle
@@ -574,8 +574,8 @@ if (options.dust_snow_mixing):
     basecmd = basecmd+' --dust_snow_mixing'
 if (options.no_snicar_ad):
     basecmd = basecmd+' --no_snicar_ad'
-if (options.use_extra_snow_layers):
-    basecmd = basecmd+' --use_extra_snow_layers'
+if (options.use_firn_percolation_and_compaction):
+    basecmd = basecmd+' --use_firn_percolation_and_compaction'
 basecmd = basecmd + ' --np '+str(options.np)
 basecmd = basecmd + ' --tstep '+str(options.tstep)
 basecmd = basecmd + ' --co2_file '+options.co2_file
@@ -712,7 +712,7 @@ if (options.trans_varlist != ''):
 if (options.ilambvars):
     cmd_trns = cmd_trns + ' --ilambvars'
 if (options.dailyvars):
-    cmd_trns = cmd_trns + ' --dailyvars'        
+    cmd_trns = cmd_trns + ' --dailyvars'
 if (options.dailyrunoff):
     cmd_trns = cmd_trns+' --dailyrunoff'
 
@@ -752,7 +752,7 @@ if ((options.cruncep or options.cruncepv8) and not options.cpl_bypass and not op
     print('\nSetting up transient case phase 2\n')
     ierror = os.system(cmd_trns2)
     if ierror != 0: sys.exit(-1)
-        
+
 
 cases=[]
 job_depend_run=''
@@ -785,7 +785,7 @@ if (options.mc_ensemble <= 0):
         if (int(options.run_startyear) > 0):
           model_startdate = int(options.run_startyear)
           run_n_total = int(fsplen)
-        else:  
+        else:
           model_startdate = 1850
           run_n_total = int(translen)
     else:
@@ -799,7 +799,7 @@ if (options.mc_ensemble <= 0):
         mysubmit_type=''
     #if ('cades' in options.machine or 'anvil' in options.machine or 'compy' in options.machine or 'cori' in options.machine):
     #    mysubmit_type = 'sbatch'
-    #Create a .PBS site fullrun script to launch the full job 
+    #Create a .PBS site fullrun script to launch the full job
 
     for n in range(0,n_submits):
         output = open('./temp/global_'+c+'_'+str(n)+'.pbs','w')
@@ -849,7 +849,7 @@ if (options.mc_ensemble <= 0):
               output.write(s)
         input.close()
         output.write("\n")
-   
+
         if (options.machine == 'cades'):
             output.write('source $MODULESHOME/init/bash\n')
             output.write('module unload python\n')
@@ -877,13 +877,13 @@ if (options.mc_ensemble <= 0):
             output.write('module unload scipy\n')
             output.write('module unload numpy\n')
             output.write('module load python/2.7-anaconda\n')
-            output.write('module load nco\n')                  
-   
+            output.write('module load nco\n')
+
         this_run_n = runblock
         if (n == (n_submits-1)):
             this_run_n = run_n_total- (n * runblock)
 
-        
+
         output.write("cd "+caseroot+'/'+c+"/\n")
         output.write("./xmlchange --id STOP_N --val "+str(this_run_n)+'\n')
         if (options.cplhist):
@@ -891,9 +891,9 @@ if (options.mc_ensemble <= 0):
         else:
           output.write("./xmlchange --id REST_N --val 20\n")   #Restart every 20 years in global mode
         output.write("./xmlchange --id RUN_STARTDATE --val "+(str(10000+model_startdate))[1:]+ \
-                         '-01-01\n')                           
+                         '-01-01\n')
         if (n > 0):
-            #change finidat 
+            #change finidat
             mylnd_in = open(caseroot+'/'+c+'/user_nl_clm','r')
             mylnd_out = open(caseroot+'/'+c+'/user_nl_clm_'+str(n), 'w')
             for s in mylnd_in:
@@ -905,7 +905,7 @@ if (options.mc_ensemble <= 0):
             mylnd_in.close()
             mylnd_out.close()
             output.write(" cp user_nl_clm_"+str(n)+" user_nl_clm\n")
-        model_startdate = model_startdate + runblock          
+        model_startdate = model_startdate + runblock
         output.write("./case.submit --no-batch\n")
         output.write("cd "+os.path.abspath(".")+'\n')
         #if ('ad_spinup' in c and n == (n_submits-1)):
@@ -920,7 +920,7 @@ if (options.mc_ensemble <= 0):
         output.close()
 
         if not options.no_submit:
-            os.system('chmod u+x temp/global_'+c+'_'+str(n)+'.pbs') 
+            os.system('chmod u+x temp/global_'+c+'_'+str(n)+'.pbs')
             job_depend_run = submit('temp/global_'+c+'_'+str(n)+'.pbs',job_depend=job_depend_run, \
                                     submit_type=mysubmit_type)
-        
+
