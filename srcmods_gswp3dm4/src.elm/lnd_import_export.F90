@@ -301,7 +301,7 @@ contains
             metsource_str = 'princeton'
             atm2lnd_vars%endyear_met_trans = 2012 
           else if (atm2lnd_vars%metsource == 4) then 
-            atm2lnd_vars%endyear_met_trans  = 2014
+            atm2lnd_vars%endyear_met_trans  = 2109
           else if (atm2lnd_vars%metsource == 5) then
             atm2lnd_vars%startyear_met      = 566 !76
             atm2lnd_vars%endyear_met_spinup = 590 !100
@@ -312,7 +312,8 @@ contains
               atm2lnd_vars%startyear_met      = 1950
               atm2lnd_vars%endyear_met_spinup = 1969
           else if (use_daymet) then 
-              atm2lnd_vars%startyear_met      = 1980
+              !atm2lnd_vars%startyear_met      = 1980
+              atm2lnd_vars%startyear_met = 1850
               atm2lnd_vars%endyear_met_spinup = atm2lnd_vars%endyear_met_trans
           end if
 
@@ -399,7 +400,7 @@ contains
                 if (use_livneh .and. ztoget .ge. 16 .and. ztoget .le. 20) then 
                     metdata_fname = 'GSWP3_Livneh_' // trim(metvars(v)) // '_1950-2010_z' // zst(2:3) // '.nc'                
                 else if (use_daymet) then 
-                    metdata_fname = 'GSWP3_daymet4_' // trim(metvars(v)) // '_1980-2014_z' // zst(2:3) // '.nc' 
+                    metdata_fname = 'GSWP3_daymet4_' // trim(metvars(v)) // '_1850-2109.nc' 
                     write(iulog,*) "Opening this file:", metdata_fname
                 end if
             else if (atm2lnd_vars%metsource == 5) then 
