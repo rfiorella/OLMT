@@ -15,7 +15,7 @@
 # case 6: test site run with ERA5 cpl bypass format. user provided domain, surface, and
 # landuse files.
 
-set case=10
+set case=12
 
 if ($case == 1) then
   python3 ./site_fullrun.py --compiler gnu --mpilib openmpi --machine ees \
@@ -82,14 +82,32 @@ else if ($case == 9) then
          --landusefile /project/neon_e3sm/inputdata/lnd/clm2/surfdata_map/landuse.timeseries_1x1pt_teller-GRID_simyr1850-2015_c180423.nc \
          --nofire --no_budgets --nopointdata --model_root /home/rfiorella/NGEE-Arctic-E3SM
 else if ($case == 10) then
+#  python3 ./site_fullrun.py --compiler gnu --mpilib openmpi --machine ees \
+#         --site AK-TLG --sitegroup NGEEArctic --caseidprefix bendtest --cpl_bypass --era5 \
+#         --metdir /project/neon_e3sm/inputdata/atm/datm7/era5_noleap/tl \
+#         --srcmods_loc /home/rfiorella/OLMT/srcmods_era5cb \
+#         --domainfile /project/neon_e3sm/inputdata/share/domains/domain.clm/domain.lnd.1x1pt_teller-GRID_navy.nc \
+#         --surffile /project/neon_e3sm/inputdata/lnd/clm2/surfdata_map/surfdata_1x1pt_teller-GRID_simyr1850_c360x720_c171002.nc \
+#         --landusefile /project/neon_e3sm/inputdata/lnd/clm2/surfdata_map/landuse.timeseries_1x1pt_teller-GRID_simyr1850-2015_c180423.nc \
+#         --mod_parm_file /project/neon_e3sm/inputdata/lnd/clm2/paramdata/clm_params_c180524-bendparm.nc \
+#         --nofire --no_budgets --nopointdata --model_root /lclscratch/rfiorella/NGEE-Arctic-E3SM-rfiorellaIM3
   python3 ./site_fullrun.py --compiler gnu --mpilib openmpi --machine ees \
-         --site AK-TLG --sitegroup NGEEArctic --caseidprefix test10 --cpl_bypass --era5 \
+         --site AK-TLG --sitegroup NGEEArctic --caseidprefix bendctrl2 --cpl_bypass --era5 \
          --metdir /project/neon_e3sm/inputdata/atm/datm7/era5_noleap/tl \
          --srcmods_loc /home/rfiorella/OLMT/srcmods_era5cb \
          --domainfile /project/neon_e3sm/inputdata/share/domains/domain.clm/domain.lnd.1x1pt_teller-GRID_navy.nc \
          --surffile /project/neon_e3sm/inputdata/lnd/clm2/surfdata_map/surfdata_1x1pt_teller-GRID_simyr1850_c360x720_c171002.nc \
          --landusefile /project/neon_e3sm/inputdata/lnd/clm2/surfdata_map/landuse.timeseries_1x1pt_teller-GRID_simyr1850-2015_c180423.nc \
-         --nofire --no_budgets --nopointdata --model_root /home/rfiorella/NGEE-Arctic-E3SM
+         --nofire --no_budgets --nopointdata --model_root /lclscratch/rfiorella/NGEE-Arctic-E3SM-master
+else if ($case == 12) then 
+    python3 ./site_fullrun.py --compiler gnu --mpilib openmpi --machine ees \
+         --site AK-BEO --sitegroup NGEEArctic --caseidprefix im1test --cpl_bypass --gswp3 \
+         --model_root /lclscratch/rfiorella/NGEE-Arctic-E3SM-rfiorellaIM1 \
+         --metdir /project/neon_e3sm/inputdata/atm/datm7/atm_forcing.datm7.GSWP3.0.5d.v2.c180716_NGEE-Grid/cpl_bypass_beo-Grid \
+         --domainfile /project/neon_e3sm/inputdata/share/domains/domain.clm/domain.lnd.1x1pt_beo-GRID_navy.nc \
+         --surffile /project/neon_e3sm/inputdata/lnd/clm2/surfdata_map/surfdata_1x1pt_beo-GRID_simyr1850_c360x720_c171002.nc \
+         --landusefile /project/neon_e3sm/inputdata/lnd/clm2/surfdata_map/landuse.timeseries_1x1pt_beo-GRID_simyr1850-2015_c180423.nc \
+         --nofire --no_budgets --notrans --nofnsp --spinup_vars --nopointdata
 else if ($case == 11) then #docker test!
   python3 ./site_fullrun.py --compiler gnu --mpilib openmpi --machine docker \
          --site AK-TLG --sitegroup NGEEArctic --ccsm_input /home/e3smuser/inputdata \
@@ -99,4 +117,13 @@ else if ($case == 11) then #docker test!
          --surffile /home/e3smuser/inputdata/lnd/clm2/surfdata_map/surfdata_1x1pt_teller-GRID_simyr1850_c360x720_c171002.nc \
          --landusefile /home/e3smuser/inputdata/lnd/clm2/surfdata_map/landuse.timeseries_1x1pt_teller-GRID_simyr1850-2015_c180423.nc \
          --nofire --no_budgets --spinup_vars --nopointdata
+else if ($case == 13) then
+  python3 ./site_fullrun.py --compiler gnu --mpilib openmpi --machine ees \
+	--site AK-TLG --sitegroup NGEEArctic --caseidprefix topounit_tests_no_topounit_flags_topounit_file \
+        --cpl_bypass --era5 --metdir /project/ngee3/cbachand/inputdata/era5_noleap/tl \
+        --srcmods_loc  /home/ctrotter/OLMT/srcmods_era5cb \
+        --domainfile /project/ngee3/rcrumley/elm/data/surfdata/domain_1.nc \
+        --surffile /home/ctrotter/surffiles/modified_surfdata_1x1pt_teller_elev_eas_pr-GRID_simyr1850_c360x720_c171002.nc \
+        --nopftdyn   --nofire --no_budgets --spinup_vars –-nopointdata --model_root /home/rfiorella/NGEE-Arctic-E3SM
+
 endif
