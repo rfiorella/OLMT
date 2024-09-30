@@ -24,62 +24,76 @@
 # I have one called ncview that has netcdf4 and ncview, so
 # I typically use `conda activate ncview`
 
+# set some variables
+export MACHINE=docker
+
+if [ $MACHINE == 'ees' ]; then
+  export INPUTDATA=/project/neon_e3sm/inputdata
+  export SRCMODS=/home/rfiorella/OLMT/srcmods_gswp3dm4
+  export MOD_CTRL=/lclscratch/rfiorella/NGEE-Arctic-E3SM-master
+  export MOD_TEST=/lclscratch/rfiorella/E3SM-IM1-patch
+elif [ $MACHINE == 'docker' ]; then
+  export INPUTDATA=/home/e3smuser/inputdata
+  export SRCMODS=/home/e3smuser/OLMT
+  export MOD_CTRL=/home/e3smuser/E3SM
+  export MOD_TEST=/home/e3smuser/E3SM
+else
+  stop
+fi
+
+# set a common args sting
+export COMMON_ARGS='--compiler gnu --mpilib openmpi --site AK-ICP --sitegroup NGEEArctic --nofire --nobudgets \
+                    --nopointdata --cpl_bypass --gswp3 --daymet4 --dailyrunoff '
+
 #-----------------------------------------------------------
 
-case=1
+case=3
 
 if [ $case == 1 ]; then
-  python3 ./site_fullrun.py --compiler gnu --mpilib openmpi --machine ees \
-         --site AK-ICP --sitegroup NGEEArctic --caseidprefix ICP-oldinit --cpl_bypass --gswp3 --daymet4 \
-         --domainfile /project/neon_e3sm/inputdata/share/domains/domain.clm/ngee-arctic-development/IcyCape_domain.nc \
-         --surffile /project/neon_e3sm/inputdata/lnd/clm2/surfdata_map/ngee-arctic-development/IM1/IcyCape/IcyCape_surfdata.nc \
-         --landusefile /project/neon_e3sm/inputdata/lnd/clm2/surfdata_map/ngee-arctic-development/IM1/IcyCape/IcyCape_surfdata.pftdyn.nc \
-         --model_root /lclscratch/rfiorella/NGEE-Arctic-E3SM-master \
-         --srcmods_loc /home/rfiorella/OLMT/srcmods_gswp3dm4 \
-         --metdir /project/ngee3/xhuang/IM1_ELM_forcings/IcyCape_1850-2109_fixed/ \
-	 --ccsm_input /project/neon_e3sm/inputdata \
-         --nofire --no_budgets --notrans --nofnsp --nopointdata
+  python3 ./site_fullrun.py --machine ${MACHINE} ${COMMON_ARGS} \
+        --caseidprefix ICP-oldinit --ccsm_input ${INPUTDATA} \
+         --domainfile ${INPUTDATA}/share/domains/domain.clm/ngee-arctic-development/IcyCape_domain.nc \
+         --surffile ${INPUTDATA}/lnd/clm2/surfdata_map/ngee-arctic-development/IM1/IcyCape/IcyCape_surfdata.nc \
+         --landusefile ${INPUTDATA}/lnd/clm2/surfdata_map/ngee-arctic-development/IM1/IcyCape/IcyCape_surfdata.pftdyn.nc \
+         --model_root ${MOD_CTRL} --srcmods_loc ${SRCMODS} \
+         --metdir ${INPUTDATA}/atm/datm7/IcyCape_1850-2109_fixed
+	       
 elif [ $case == 2 ]; then
-  python3 ./site_fullrun.py --compiler gnu --mpilib openmpi --machine ees \
-         --site AK-ICP --sitegroup NGEEArctic --caseidprefix ICP-nopolygon --cpl_bypass --gswp3 --daymet4 \
-         --domainfile /project/neon_e3sm/inputdata/share/domains/domain.clm/ngee-arctic-development/IcyCape_domain.nc \
-         --surffile /project/neon_e3sm/inputdata/lnd/clm2/surfdata_map/ngee-arctic-development/IM1/IcyCape/IcyCape_surfdata.nc \
-         --landusefile /project/neon_e3sm/inputdata/lnd/clm2/surfdata_map/ngee-arctic-development/IM1/IcyCape/IcyCape_surfdata.pftdyn.nc \
-         --model_root /lclscratch/rfiorella/IM1-patch \
-         --srcmods_loc /home/rfiorella/OLMT/srcmods_gswp3dm4 \
-         --metdir /project/ngee3/xhuang/IM1_ELM_forcings/IcyCape_1850-2109_fixed/ \
-         --nofire --no_budgets --spinup_vars --nopointdata
+  python3 ./site_fullrun.py --machine ${MACHINE} ${COMMON_ARGS} \
+         --caseidprefix ICP-nopolygon --ccsm_input ${INPUTDATA} \
+         --domainfile ${INPUTDATA}/share/domains/domain.clm/ngee-arctic-development/IcyCape_domain.nc \
+         --surffile ${INPUTDATA}/lnd/clm2/surfdata_map/ngee-arctic-development/IM1/IcyCape/IcyCape_surfdata.nc \
+         --landusefile ${INPUTDATA}/lnd/clm2/surfdata_map/ngee-arctic-development/IM1/IcyCape/IcyCape_surfdata.pftdyn.nc \
+         --model_root ${MOD_TEST} --srcmods_loc ${SRCMODS} \
+         --metdir ${INPUTDATA}/atm/datm7/IcyCape_1850-2109_fixed
 elif [ $case == 3 ]; then
-  python3 ./site_fullrun.py --compiler gnu --mpilib openmpi --machine ees \
-         --site AK-ICP --sitegroup NGEEArctic --caseidprefix ICP-HCP-test --cpl_bypass --gswp3 --daymet4 \
-         --domainfile /project/neon_e3sm/inputdata/share/domains/domain.clm/ngee-arctic-development/IcyCape_domain.nc \
-         --surffile /project/neon_e3sm/inputdata/lnd/clm2/surfdata_map/ngee-arctic-development/IM1/IcyCape/IcyCape_surfdata_HCP.nc \
-         --landusefile /project/neon_e3sm/inputdata/lnd/clm2/surfdata_map/ngee-arctic-development/IM1/IcyCape/IcyCape_surfdata.pftdyn.nc \
-         --metdir /project/ngee3/xhuang/IM1_ELM_forcings/IcyCape_1850-2109_fixed \
-         --model_root /lclscratch/rfiorella/IM1-patch \
-         --srcmods_loc /home/rfiorella/OLMT/srcmods_gswp3dm4 \
-         --ccsm_input /project/neon_e3sm/inputdata \
-         --use_arctic_init --dailyrunoff --nofire --no_budgets --nyears_ad_spinup 20 --nyears_final_spinup 20 --nopointdata --use_polygonal_tundra --nyears_trans 251
+  python3 ./site_fullrun.py --machine ${MACHINE} ${COMMON_ARGS} \
+         --caseidprefix ICP-HCP-test --ccsm_input ${INPUTDATA} \
+         --domainfile ${INPUTDATA}/share/domains/domain.clm/ngee-arctic-development/IcyCape_domain.nc \
+         --surffile ${INPUTDATA}/lnd/clm2/surfdata_map/ngee-arctic-development/IM1/IcyCape/IcyCape_surfdata_HCP.nc \
+         --landusefile ${INPUTDATA}/lnd/clm2/surfdata_map/ngee-arctic-development/IM1/IcyCape/IcyCape_surfdata.pftdyn.nc \
+         --metdir ${INPUTDATA}/atm/datm7/IcyCape_1850-2109_fixed \
+         --model_root ${MOD_TEST} --srcmods_loc ${SRCMODS} \
+         --use_arctic_init --use_polygonal_tundra \
+         --nyears_ad_spinup 20 --nyears_final_spinup 20 --nyears_trans 251
 elif [ $case == 4 ]; then
-  python3 ./site_fullrun.py --compiler gnu --mpilib openmpi --machine ees \
-         --site AK-ICP --sitegroup NGEEArctic --caseidprefix ICP-FCP-test --cpl_bypass --gswp3 --daymet4 \
-         --domainfile /project/neon_e3sm/inputdata/share/domains/domain.clm/ngee-arctic-development/IcyCape_domain.nc \
-         --surffile /project/neon_e3sm/inputdata/lnd/clm2/surfdata_map/ngee-arctic-development/IM1/IcyCape/IcyCape_surfdata_FCP.nc \
-         --landusefile /project/neon_e3sm/inputdata/lnd/clm2/surfdata_map/ngee-arctic-development/IM1/IcyCape/IcyCape_surfdata.pftdyn.nc \
-         --metdir /project/ngee3/xhuang/IM1_ELM_forcings/IcyCape_1850-2109_fixed \
-         --model_root /lclscratch/rfiorella/IM1-patch \
-         --srcmods_loc /home/rfiorella/OLMT/srcmods_gswp3dm4 \
-         --ccsm_input /project/neon_e3sm/inputdata \
-         --nyears_ad_spinup 20 --nyears_final_spinup 20  --dailyrunoff --nofire --no_budgets --nopointdata --use_polygonal_tundra --use_arctic_init --nyears_trans 251
+  python3 ./site_fullrun.py --machine ${MACHINE} ${COMMON_ARGS} \
+         --caseidprefix ICP-FCP-test --ccsm_input ${INPUTDATA} \
+         --domainfile ${INPUTDATA}/share/domains/domain.clm/ngee-arctic-development/IcyCape_domain.nc \
+         --surffile ${INPUTDATA}/lnd/clm2/surfdata_map/ngee-arctic-development/IM1/IcyCape/IcyCape_surfdata_FCP.nc \
+         --landusefile ${INPUTDATA}/lnd/clm2/surfdata_map/ngee-arctic-development/IM1/IcyCape/IcyCape_surfdata.pftdyn.nc \
+         --metdir ${INPUTDATA}/atm/datm7/IcyCape_1850-2109_fixed \
+         --model_root ${MOD_TEST} --srcmods_loc ${SRCMODS} \
+         --use_polygonal_tundra --use_arctic_init \
+         --nyears_ad_spinup 20 --nyears_final_spinup 20 --nyears_trans 251
 elif [ $case == 5 ]; then
-  python3 ./site_fullrun.py --compiler gnu --mpilib openmpi --machine ees \
-         --site AK-ICP --sitegroup NGEEArctic --caseidprefix ICP-LCP-test --cpl_bypass --gswp3 --daymet4 \
-         --domainfile /project/neon_e3sm/inputdata/share/domains/domain.clm/ngee-arctic-development/IcyCape_domain.nc \
-         --surffile /project/neon_e3sm/inputdata/lnd/clm2/surfdata_map/ngee-arctic-development/IM1/IcyCape/IcyCape_surfdata_LCP.nc \
-         --landusefile /project/neon_e3sm/inputdata/lnd/clm2/surfdata_map/ngee-arctic-development/IM1/IcyCape/IcyCape_surfdata.pftdyn.nc \
-         --metdir /project/ngee3/xhuang/IM1_ELM_forcings/IcyCape_1850-2109_fixed \
-         --model_root /lclscratch/rfiorella/IM1-patch \
-         --srcmods_loc /home/rfiorella/OLMT/srcmods_gswp3dm4 \
-         --ccsm_input /project/neon_e3sm/inputdata \
-         --nofire --no_budgets --nyears_ad_spinup 20 --nyears_final_spinup 20 --dailyrunoff --nyears_trans 251 --nopointdata --use_arctic_init --use_polygonal_tundra
+  python3 ./site_fullrun.py --machine ${MACHINE} ${COMMON_ARGS} \
+         --caseidprefix ICP-LCP-test --ccsm_input ${INPUTDATA} \
+         --domainfile ${INPUTDATA}/share/domains/domain.clm/ngee-arctic-development/IcyCape_domain.nc \
+         --surffile ${INPUTDATA}/lnd/clm2/surfdata_map/ngee-arctic-development/IM1/IcyCape/IcyCape_surfdata_LCP.nc \
+         --landusefile ${INPUTDATA}/lnd/clm2/surfdata_map/ngee-arctic-development/IM1/IcyCape/IcyCape_surfdata.pftdyn.nc \
+         --metdir ${INPUTDATA}/atm/datm7/IcyCape_1850-2109_fixed \
+         --model_root ${MOD_TEST} --srcmods_loc ${SRCMODS} \
+         --use_arctic_init --use_polygonal_tundra \
+         --nyears_ad_spinup 20 --nyears_final_spinup 20 --nyears_trans 251
 fi
