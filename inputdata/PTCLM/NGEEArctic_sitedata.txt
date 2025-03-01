@@ -1,0 +1,8 @@
+site_code,name,state,lon,lat,elev,startyear,endyear,alignyear
+SE-Abi,"Abisko",SE,18.78,68.35,422,2000,2024,1851
+CA-TVC,"Trail Valley Creek",NT,-133.499,68.742,73,2000,2024,1851
+CA-CHA,"CHARS",NU,-105.0415,69.13,2,2000,2024,1851
+AK-Tlk,"Toolik Lake",AK,-149.59429,68.62758,730,2000,2024,1851
+CA-QHI,"Qikiqtaruk-Herschel Island",YT,-139.0762,69.5697,100,2000,2024,1851
+RU-Sam,"Samoylov Island",RU,126.3,72.22,24,2000,2024,1851
+NO-SJB,"SJ-Blv Bayelva",NO,11.83109,78.92163,53,2000,2024,1851
