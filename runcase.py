@@ -851,15 +851,15 @@ else:
 
 os.system('mkdir -p '+tmpdir)
 if (options.mod_parm_file != ''):
-    print(options.mod_parm_file)
     if os.path.exists(options.mod_parm_file):
+        print('\n -----INFO: using modified pft parameter file')
         print('nccopy -3 '+options.mod_parm_file+' '+tmpdir+'/clm_params.nc')
         os.system('nccopy -3 '+options.mod_parm_file+' '+tmpdir+'/clm_params.nc')
     else:
         print("File specified for mod_parm_file doesn't exist, please check file name/path")
         sys.exit(1)
 else:
-    print(parm_file)
+    print('\n -----INFO: using default pft parameter file')
     print('nccopy -3 '+options.ccsm_input+'/lnd/clm2/paramdata/'+parm_file+' '+tmpdir+'/clm_params.nc')
     os.system('nccopy -3 '+options.ccsm_input+'/lnd/clm2/paramdata/'+parm_file+' ' \
               +tmpdir+'/clm_params.nc')
