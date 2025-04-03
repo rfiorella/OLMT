@@ -261,8 +261,11 @@ parser.add_option("--topounits_raddownscale", dest = "topounits_raddownscale", d
 parser.add_option("--use_polygonal_tundra", dest="use_polygonal_tundra", default=False, \
                   help= "Turn on the polygonal tundra parameterizations, NGEE Arctic Phase 3 IM1", action="store_true")
 # cold initialization:
-parser.add_option("--use_arctic_init", dest = "use_arctic_init", default = False, \
-                  help = "Use colder and saturated initial conditions, NGEE Arctic IM2 and IM0", action="store_true")
+parser.add_option("--use_arctic_init", dest="use_arctic_init", default=False, \
+                  help="Use colder and saturated initial conditions, NGEE Arctic IM2 and IM0", action="store_true")
+#IM2 hillslope hydrology
+parser.add_option("--use_IM2_hillslope_hydrology", dest="use_IM2_hillslope_hydrology", default=False, \
+                  help="Use IM2 hillslope hydrology parameterization", action="store_true")
 
 
 parser.add_option("--var_list_pft", dest="var_list_pft", default="",help='Comma-separated list of vars to output at PFT level')
@@ -714,6 +717,9 @@ for row in AFdatareader:
             basecmd = basecmd + ' --use_polygonal_tundra'
         if (options.use_arctic_init):
             basecmd = basecmd + ' --use_arctic_init'
+        # Arctic hillslope hydrology
+        if (options.use_IM2_hillslope_hydrology):
+            basecmd = basecmd + ' --use_IM2_hillslope_hydrology'
 
 #---------------- build commands for runcase.py -----------------------------
 

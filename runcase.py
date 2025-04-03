@@ -353,6 +353,9 @@ parser.add_option("--use_polygonal_tundra", dest="use_polygonal_tundra", default
                   help= "Turn on the polygonal tundra parameterizations, NGEE Arctic Phase 3 IM1", action="store_true")
 parser.add_option("--use_arctic_init", dest = "use_arctic_init", default = False, \
                   help = "Use colder and saturated initial conditions, NGEE Arctic IM2 and IM0", action="store_true")
+# Arctic hillslope hydrology
+parser.add_option("--use_IM2_hillslope_hydrology", dest="use_IM2_hillslope_hydrology", default=False, \
+                  help="Use NGEE Arctic Hillslope Hydrology across topounits", action="store_true")
 
 #CI testing:
 parser.add_option("--test", dest = "test_mode", default=False,
@@ -1454,10 +1457,14 @@ for i in range(1,int(options.ninst)+1):
         output.write(" use_snicar_ad = .false.\n")
     if (options.use_extra_snow_layers):
         output.write(" use_extrasnowlayers = .true.\n")
+    # NGEE Arctic IM1
     if (options.use_polygonal_tundra):
         output.write(" use_polygonal_tundra = .true.\n")
     if (options.use_arctic_init):
         output.write(" use_arctic_init = .true.\n")
+    # NGEE Arctic IM2
+    if (options.use_IM2_hillslope_hydrology):
+        output.write(" use_IM2_hillslope_hydrology = .true.\n")
 
     #pft dynamics file for transient run
     if ('20TR' in compset or options.istrans):
