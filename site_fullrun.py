@@ -238,13 +238,9 @@ parser.add_option("--hist_mfilt_spinup", dest="hist_mfilt_spinup", default="-999
 parser.add_option("--hist_nhtfrq_spinup", dest="hist_nhtfrq_spinup", default="-999", \
                   help = 'output file timestep (spinup only)')
 
-#datasets for user-defined PFTs (by F-M Yuan, NGEE-Arctic)
-parser.add_option("--maxpatch_pft", dest="maxpatch_pft", default=17, \
-                  help = "user-defined max. patch PFT number, default is 17")
-parser.add_option("--landusefile", dest="pftdynfile", default='', \
-                  help='user-defined dynamic PFT file')
-
+#--------------------
 # NGEE Arctic Options
+#--------------------
 #snow options
 parser.add_option("--dust_snow_mixing", dest="dust_snow_mixing", default=False, \
                   help = "Use Hao et al. dust/snow mixing albedo parameterization", action="store_true")
@@ -252,6 +248,8 @@ parser.add_option("--no_snicar_ad", dest="no_snicar_ad", default=False, \
                   help = "Turn off SNICAR-AD snow microphysics model", action = "store_true")
 parser.add_option("--use_extra_snow_layers", dest = "use_extra_snow_layers", default=False, \
                   help = "Turn on extra snow layers", action="store_true")
+parser.add_option("--use_firn_percolation_and_compaction ", dest = "use_firn_percolation_and_comapction", default=False, \
+                  help = "Turn on firn percolation and compaction", action="store_true")
 #topounits
 parser.add_option("--topounits_atmdownscale", dest = "topounits_atmdownscale", default=False,
                   help="Use atmospheric downscaling in topounits", action='store_true')
@@ -267,6 +265,11 @@ parser.add_option("--use_arctic_init", dest="use_arctic_init", default=False, \
 parser.add_option("--use_IM2_hillslope_hydrology", dest="use_IM2_hillslope_hydrology", default=False, \
                   help="Use IM2 hillslope hydrology parameterization", action="store_true")
 
+#datasets for user-defined PFTs (by F-M Yuan, NGEE-Arctic)
+parser.add_option("--maxpatch_pft", dest="maxpatch_pft", default=17, \
+                  help = "user-defined max. patch PFT number, default is 17")
+parser.add_option("--landusefile", dest="pftdynfile", default='', \
+                  help='user-defined dynamic PFT file')
 
 parser.add_option("--var_list_pft", dest="var_list_pft", default="",help='Comma-separated list of vars to output at PFT level')
 parser.add_option("--dryrun",dest="dryrun",default=False,action="store_true",help="Do not execute commands")
@@ -705,6 +708,8 @@ for row in AFdatareader:
             basecmd = basecmd + ' --dust_snow_mixing'
         if (options.use_extra_snow_layers):
             basecmd = basecmd + ' --use_extra_snow_layers'
+        if (options.use_firn_percolation_and_compaction):
+            basecmd = basecmd + ' --use_firn_percolation_and_compaction'
         if (options.no_snicar_ad):
             basecmd = basecmd + ' --no_snicar_ad'
         # topounits

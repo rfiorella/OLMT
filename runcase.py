@@ -335,8 +335,10 @@ parser.add_option("--landusefile", dest="pftdynfile", default='', \
                   help='user-defined dynamic PFT file')
 parser.add_option("--var_list_pft", dest="var_list_pft", default="",help='Comma-separated list of vars to output at PFT level')
 
-#NGEE Options
-#topounits:
+#--------------------
+# NGEE Arctic Options
+#--------------------
+# use topounit downscaling:
 parser.add_option("--topounits_atmdownscale", dest = "topounits_atmdownscale", default=False, \
                   help="Use atmospheric downscaling in topounits", action='store_true')
 parser.add_option("--topounits_raddownscale", dest = "topounits_raddownscale", default=False, \
@@ -348,6 +350,8 @@ parser.add_option("--no_snicar_ad", dest="no_snicar_ad", default=False, \
                   help = "Turn off SNICAR-AD snow microphysics model", action = "store_true")
 parser.add_option("--use_extra_snow_layers", dest = "use_extra_snow_layers", default=False, \
                   help = "Turn on extra snow layers", action="store_true")
+parser.add_option("--use_firn_percolation_and_compaction ", dest = "use_firn_percolation_and_comapction", default=False, \
+                  help = "Turn on firn percolation and compaction", action="store_true")
 # polygonal tundra:
 parser.add_option("--use_polygonal_tundra", dest="use_polygonal_tundra", default=False, \
                   help= "Turn on the polygonal tundra parameterizations, NGEE Arctic Phase 3 IM1", action="store_true")
@@ -1457,6 +1461,8 @@ for i in range(1,int(options.ninst)+1):
         output.write(" use_snicar_ad = .false.\n")
     if (options.use_extra_snow_layers):
         output.write(" use_extrasnowlayers = .true.\n")
+    if (options.use_firn_percolation_and_compaction):
+        output.write(" use_firn_percolation_and_compaction = .true.\n")
     # NGEE Arctic IM1
     if (options.use_polygonal_tundra):
         output.write(" use_polygonal_tundra = .true.\n")
