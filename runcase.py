@@ -13,7 +13,7 @@ from optparse import OptionParser
 #  2. Use create_newcase to build the new case with specified options
 #  3. Set point and case-epecific namelist options
 #  4. configure case
-#  5. build (compile) ACME with clean_build first if requested
+#  5. build (compile) E3SM with clean_build first if requested
 #  6. apply user-specified PBS and submit information
 #  7. submit single run or parameter ensemble job to PBS queue.
 #
@@ -73,10 +73,6 @@ parser.add_option("--coldstart", dest="coldstart", default=False, \
 parser.add_option("--compset", dest="compset", default='I1850CNPRDCTCBC', \
                   help = "component set to use (required)\n"
                          "Currently supports ONLY *CLM45(CN) compsets")
-
-
-
-
 
 parser.add_option("--istrans", dest="istrans", default=False, action="store_true",\
                  help="Force compset to act like transient")
@@ -145,6 +141,8 @@ parser.add_option("--livneh", dest="livneh", default=False, \
                   action="store_true", help = "Livneh correction to CRU precip (CONUS only)")
 parser.add_option("--daymet", dest="daymet", default=False, \
                   action="store_true", help = "Daymet correction to GSWP3 precip (CONUS only)")
+parser.add_option("--era5", dest="era5", default=False, \
+                  action="store_true", help = 'Use ERA5 atmospheric reanalysis')
 parser.add_option("--monthly_metdata", dest="monthly_metdata", default = '', \
                   help = "File containing met data (cpl_bypass only)")
 parser.add_option("--add_temperature", dest="addt", default=0.0, \
@@ -334,8 +332,37 @@ parser.add_option("--maxpatch_pft", dest="maxpatch_pft", default=17, \
 parser.add_option("--landusefile", dest="pftdynfile", default='', \
                   help='user-defined dynamic PFT file')
 parser.add_option("--var_list_pft", dest="var_list_pft", default="",help='Comma-separated list of vars to output at PFT level')
-(options, args) = parser.parse_args()
 
+#--------------------
+# NGEE Arctic Options
+#--------------------
+# use topounit downscaling:
+parser.add_option("--topounits_atmdownscale", dest = "topounits_atmdownscale", default=False, \
+                  help="Use atmospheric downscaling in topounits", action='store_true')
+parser.add_option("--topounits_raddownscale", dest = "topounits_raddownscale", default=False, \
+                  help="Downscale radiation input to topounits", action = "store_true")
+# snow options:
+parser.add_option("--dust_snow_mixing", dest="dust_snow_mixing", default=False, \
+                  help = "Use Hao et al. dust/snow mixing albedo parameterization", action="store_true")
+parser.add_option("--no_snicar_ad", dest="no_snicar_ad", default=False, \
+                  help = "Turn off SNICAR-AD snow microphysics model", action = "store_true")
+parser.add_option("--use_extra_snow_layers", dest = "use_extra_snow_layers", default=False, \
+                  help = "Turn on extra snow layers", action="store_true")
+parser.add_option("--use_firn_percolation_and_compaction ", dest = "use_firn_percolation_and_compaction", default=False, \
+                  help = "Turn on firn percolation and compaction", action="store_true")
+# polygonal tundra:
+parser.add_option("--use_polygonal_tundra", dest="use_polygonal_tundra", default=False, \
+                  help= "Turn on the polygonal tundra parameterizations, NGEE Arctic Phase 3 IM1", action="store_true")
+parser.add_option("--use_arctic_init", dest = "use_arctic_init", default = False, \
+                  help = "Use colder and saturated initial conditions, NGEE Arctic IM2 and IM0", action="store_true")
+# Arctic hillslope hydrology
+parser.add_option("--use_IM2_hillslope_hydrology", dest="use_IM2_hillslope_hydrology", default=False, \
+                  help="Use NGEE Arctic Hillslope Hydrology across topounits", action="store_true")
+# adjust topounit/pft output:
+parser.add_output("--arctic_topounit_output", dest="arctic_topounit_output",default=False, \
+                  help="Activate topounit-level and pft-level outputs by turning on hist_dov2xy")
+
+(options, args) = parser.parse_args()
 #-------------------------------------------------------------------------------
 # If only make point(s) data, reset relevant options.
 if (options.makepointdata_only):
@@ -350,7 +377,7 @@ if (options.makepointdata_only):
 elif(options.domainfile!="" and options.surffile!="" and \
     (options.nopftdyn or options.pftdynfile!="")):
     options.nopointdata = True
-    
+
 
 #Set default model root
 if (options.csmdir == ''):
@@ -390,8 +417,10 @@ elif ('chrysalis' in options.machine):
     ppn=64
 elif ('pm-cpu' in options.machine):
     ppn=128
-elif ('docker' in options.machine):
+elif ('docker' in options.machine or 'mac' in options.machine):
     ppn=4
+elif ('ees' in options.machine):
+    ppn=32
 if (options.ensemble_file == ''):
   ppn=min(ppn, int(options.np))
 
@@ -402,7 +431,7 @@ PTCLMdir = os.getcwd()
 
 #set model if not specified
 if (options.mymodel == ''):
-  if ('clm5' in options.csmdir): 
+  if ('clm5' in options.csmdir):
       options.mymodel = 'CLM5'
   elif ('E3SM' in options.csmdir or 'e3sm' in options.csmdir or 'ACME' in options.csmdir):
       options.mymodel = 'ELM'
@@ -522,14 +551,14 @@ if (options.finidat == ''  and options.finidat_case == ''):  #not user-defined
 
         if (options.finidat_year == -1):
             finidat_year = int(options.ny_ad)+1
-    
+
     if (compset == "I20TRCLM45"+mybgc or compset == "I20TRCRUCLM45"+mybgc):
         if (options.mycaseid != ''):
             options.finidat_case = options.mycaseid+'_'+options.site+ \
                 '_I1850CLM45'+mybgc
         else:
             options.finidat_case = options.site + '_I1850CLM45'+mybgc
-            
+
         if (options.finidat_year == -1):
             finidat_year=1850
     if (compset == "I20TR"+mybgc):
@@ -561,7 +590,7 @@ if (options.finidat_case != ''):
 if (options.finidat != ''):
     finidat = options.finidat
     finidat_year = int(finidat[-19:-15])
-    finidat_yst = str(10000+finidat_year)    
+    finidat_yst = str(10000+finidat_year)
 
 #construct default casename
 casename    = options.site+"_"+compset
@@ -572,7 +601,8 @@ if (options.metdir!='none'):# obviously user-provided met forcing is not reanaly
     use_reanalysis = False
 #CRU-NCEP 2 transient phases
 elif ('CRU' in compset or options.cruncep or options.gswp3 or options.gswp3_w5e5 or \
-            options.crujra or options.cruncepv8 or options.princeton or options.cplhist):
+            options.crujra or options.cruncepv8 or options.princeton or options.cplhist or \
+            options.era5 or options.era5_land):
     use_reanalysis = True
 else:
     use_reanalysis = False
@@ -587,7 +617,7 @@ if (options.exit_spinup):
     casename = casename+'_exit_spinup'
 if (options.istrans and not "20TR" in compset):
     casename = casename+'_trans'
-if (options.transtag != ""): 
+if (options.transtag != ""):
     casename = casename+'_'+options.transtag
 
 PTCLMfiledir = options.ccsm_input+'/lnd/clm2/PTCLM'
@@ -604,7 +634,7 @@ else:
 print('Machine is: '+options.machine)
 #Check for existing case directory
 if (os.path.exists(casedir)):
-    
+
     print('Warning:  Case directory exists')
     if (options.rmold):
         print('--rmold specified.  Removing old case ')
@@ -614,7 +644,7 @@ if (os.path.exists(casedir)):
         if var[0] == 'r':
             os.system('rm -rf '+casedir)
         if var[0] == 'x':
-            sys.exit(1)    
+            sys.exit(1)
 print("CASE directory is: "+casedir)
 
 #Construct case build and run directory
@@ -663,7 +693,7 @@ if (options.nopointdata == False):
         ptcmd = ptcmd + ' --crop'
     if (isglobal):
         ptcmd = ptcmd + ' --res '+options.res
-        
+
         # if using global dataset to extract for running at a list of grid-points
         if (options.point_list != ''):
             ptcmd = ptcmd+' --point_list '+options.point_list
@@ -772,10 +802,15 @@ else:
 
 os.system('mkdir -p '+tmpdir)
 if (options.mod_parm_file != ''):
-    print('nccopy -3 '+options.mod_parm_file+' '+tmpdir+'/clm_params.nc')
-    os.system('nccopy -3 '+options.mod_parm_file+' '+tmpdir+'/clm_params.nc')
+    if os.path.exists(options.mod_parm_file):
+        print('\n -----INFO: using modified pft parameter file')
+        print('nccopy -3 '+options.mod_parm_file+' '+tmpdir+'/clm_params.nc')
+        os.system('nccopy -3 '+options.mod_parm_file+' '+tmpdir+'/clm_params.nc')
+    else:
+        print("File specified for mod_parm_file doesn't exist, please check file name/path")
+        sys.exit(1)
 else:
-    print(parm_file)
+    print('\n -----INFO: using default pft parameter file')
     print('nccopy -3 '+options.ccsm_input+'/lnd/clm2/paramdata/'+parm_file+' '+tmpdir+'/clm_params.nc')
     os.system('nccopy -3 '+options.ccsm_input+'/lnd/clm2/paramdata/'+parm_file+' ' \
               +tmpdir+'/clm_params.nc')
@@ -873,7 +908,7 @@ if (options.parm_file != ''):
                     else:
                         print('No PFT specified. Assuming universal parameter')
                         os.system(myncap+' -O -s "%s = q10_mr*0+%s" '%(values[0],values[2])+tmpdir+'/clm_params.nc '+tmpdir+'/clm_params.nc')
-               
+
     input.close()
 
 if (options.parm_vals != ''):
@@ -885,14 +920,14 @@ if (options.parm_vals != ''):
         thisvar = nffun.getvar(pftfile, parm_data[0])
         if (len(parm_data) == 2):
             thisvar[...] = float(parm_data[1])
-        elif (len(parm_data) == 3): 
+        elif (len(parm_data) == 3):
            if (float(parm_data[1]) >= 0):
                thisvar[int(parm_data[1])] = float(parm_data[2])
-           else: 
+           else:
                thisvar[...] = float(parm_data[2])
         ierr =  nffun.putvar(pftfile, parm_data[0], thisvar)
-           
-#parameter (soil order dependent) modifications if desired    ::X.YANG 
+
+#parameter (soil order dependent) modifications if desired    ::X.YANG
 if (options.mymodel == 'ELM'):
     if (options.mod_parm_file_P != ''):
         os.system('cp '+options.mod_parm_file_P+' '+tmpdir+'/CNP_parameters.nc')
@@ -984,7 +1019,7 @@ os.system('./xmlchange RUNDIR='+rundir)
 os.system('./xmlchange DOUT_S=TRUE')
 os.system('./xmlchange DOUT_S_ROOT='+runroot+'/archive/'+casename)
 os.system('./xmlchange DIN_LOC_ROOT='+options.ccsm_input)
-os.system('./xmlchange DIN_LOC_ROOT_CLMFORC='+options.ccsm_input+'/atm/datm7/')    
+os.system('./xmlchange DIN_LOC_ROOT_CLMFORC='+options.ccsm_input+'/atm/datm7/')
 
 #define mask and resoultion
 if (isglobal == False):
@@ -1015,14 +1050,17 @@ else:
   os.system('./xmlchange LND_DOMAIN_FILE='+domainfile)
 
 #turn off archiving
-os.system('./xmlchange DOUT_S=FALSE') 
+os.system('./xmlchange DOUT_S=FALSE')
 #datm options
 if (not cpl_bypass):
     if (use_reanalysis):
-        os.system('./xmlchange DATM_MODE=CLMCRUNCEP') 
+        if (options.cruncep):
+          os.system('./xmlchange DATM_MODE=CLMCRUNCEP')
+        if (options.gswp3):
+          os.system('./xmlchange DATM_MODE=CLMGSWP3v1')
     else:
         if (isglobal == False):
-            os.system('./xmlchange DATM_MODE=CLM1PT') 
+            os.system('./xmlchange DATM_MODE=CLM1PT')
     os.system('./xmlchange DATM_CLMNCEP_YR_START='+str(startyear))
     os.system('./xmlchange DATM_CLMNCEP_YR_END='+str(endyear))
     if (options.align_year == -999):
@@ -1050,9 +1088,9 @@ if ('20TR' in compset or options.istrans):
     os.system('./xmlchange '+mylsm+'_CO2_TYPE=diagnostic')
     if (options.run_startyear == -1):
         os.system('./xmlchange RUN_STARTDATE=1850-01-01')
-    
+
 #No pnetcdf for small cases on compy
-if (('docker' in options.machine or 'compy' in options.machine) and int(options.np) < 80):
+if (('docker' in options.machine or 'compy' in options.machine or 'ees' in options.machine) and int(options.np) < 80):
   os.system('./xmlchange PIO_TYPENAME=netcdf')
 
 comps = ['ATM','LND','ICE','OCN','CPL','GLC','ROF','WAV','ESP','IAC']
@@ -1098,7 +1136,7 @@ if (options.clean_config):
     os.system('rm -f Macro')
     os.system('rm -f user-nl-*')
 
-# Add options for FFLAGS to Macros file here 
+# Add options for FFLAGS to Macros file here
 
 #clm namelist modifications
 for i in range(1,int(options.ninst)+1):
@@ -1119,7 +1157,7 @@ for i in range(1,int(options.ninst)+1):
         namelist_in = open(PTCLMdir+'/'+options.namelist_file,'r')
       elif (os.path.isfile(options.namelist_file)):
         namelist_in = open(options.namelist_file,'r')
-      else: 
+      else:
         print('Error:  namelist_file does not exist.  Aborting')
         sys.exit(1)
       for s in namelist_in:
@@ -1145,7 +1183,7 @@ for i in range(1,int(options.ninst)+1):
             'CPOOL_TO_LIVESTEMC_STORAGE', 'CPOOL_TO_DEADCROOTC_STORAGE', 'CPOOL_TO_LIVECROOTC_STORAGE', \
             'ER', 'HR', 'FROOTC_STORAGE', 'LEAFC_STORAGE', 'LEAFC_XFER', 'FROOTC_XFER', 'LIVESTEMC_XFER', \
             'DEADSTEMC_XFER', 'LIVECROOTC_XFER', 'DEADCROOTC_XFER', 'SR', 'HR_vr', 'FIRA', 'CPOOL_TO_LIVESTEMC', 'TOTLITC', 'TOTSOMC'])
-    #var_list_hourly_bgc 
+    #var_list_hourly_bgc
     var_list_daily = ['TLAI','SNOWDP','H2OSFC','ZWT']
     if ('RD' in compset or 'ECA' in compset):
       var_list_daily.extend(['TOTLITC', 'TOTSOMC', 'CWDC', 'LITR1C_vr', 'LITR2C_vr', 'LITR3C_vr', 'SOIL1C_vr', \
@@ -1168,6 +1206,8 @@ for i in range(1,int(options.ninst)+1):
                     'CPOOL_TO_DEADCROOTC_STORAGE', 'CPOOL_TO_LIVECROOTC_STORAGE', \
                     'FROOTC_STORAGE', 'LEAFC_STORAGE', 'LEAFC_XFER', 'FROOTC_XFER', 'LIVESTEMC_XFER', \
                     'DEADSTEMC_XFER', 'LIVECROOTC_XFER', 'DEADCROOTC_XFER', 'CPOOL_TO_LIVESTEMC'])
+    elif (options.arctic_topounit_output):
+        var_list_pft.extend(['TSOI','H2OSOI','ALT','SOILLIQ','SOILICE','TG'])
     if options.var_list_pft != '':
         var_list_pft = options.var_list_pft.split(',')
     var_list_spinup = ['PPOOL', 'EFLX_LH_TOT', 'RETRANSN', 'PCO2', 'PBOT', 'NDEP_TO_SMINN', 'OCDEP', \
@@ -1221,7 +1261,14 @@ for i in range(1,int(options.ninst)+1):
 
     if (options.hist_nhtfrq != -999 and not options.diags):
         if (options.ad_spinup):
-            output.write(" hist_nhtfrq = "+ str(options.hist_nhtfrq)+", "+str(options.hist_nhtfrq)+"\n")
+            if (options.dailyrunoff and options.use_polygonal_tundra):
+                output.write(" hist_nhtfrq = "+ str(options.hist_nhtfrq)+", "+ str(options.hist_nhtfrq)+", -24\n")
+                output.write(" hist_fincl3 = 'TBOT','QBOT','RAIN','SNOW','QBOT','PBOT','WIND','FPSN','QVEGT'," \
+                        +"'QVEGE','QSOIL','QRUNOFF','QDRAI','QOVER','H2OSFC','ZWT','SNOWDP','H2OSOI','TSOI','TWS'," \
+                        +"'FSDS','FLDS','ALT','ALTMAX_EVER','SNOW_DEPTH','SOILICE','SOILLIQ','ZWT','ZWT_PERCH'," \
+                        +"'QDRAI_PERCH','QH2OSFC','FH2OSFC','FINUNDATED','SUBSIDENCE','MICROREL','DEPRESS_DEPTH','EXCESS_ICE','EXCLUDED_VOL'\n")
+            else:
+                output.write(" hist_nhtfrq = "+ str(options.hist_nhtfrq)+", "+str(options.hist_nhtfrq)+"\n")
         else:
             if (options.dailyvars):
                 output.write(" hist_nhtfrq = "+ str(options.hist_nhtfrq)+",-24,-24\n")
@@ -1235,11 +1282,17 @@ for i in range(1,int(options.ninst)+1):
                     h2varst = h2varst+"'"+str(v)+"',"
                 output.write(h1varst[:-1]+"\n")
                 output.write(h2varst[:-1]+"\n")
-            elif (options.dailyrunoff):
+            elif (options.dailyrunoff and not options.use_polygonal_tundra):
                 output.write(" hist_nhtfrq = "+ str(options.hist_nhtfrq)+",-24\n")
                 output.write(" hist_fincl2 = 'TBOT','QBOT','RAIN','SNOW','QBOT','PBOT','WIND','FPSN','QVEGT'," \
                         +"'QVEGE','QSOIL','QRUNOFF','QDRAI','QOVER','H2OSFC','ZWT','SNOWDP','H2OSOI','TSOI','TWS'," \
                         +"'FSDS','FLDS'\n")
+            elif (options.dailyrunoff and options.use_polygonal_tundra):
+                output.write(" hist_nhtfrq = "+ str(options.hist_nhtfrq)+",-24\n")
+                output.write(" hist_fincl2 = 'TBOT','QBOT','RAIN','SNOW','QBOT','PBOT','WIND','FPSN','QVEGT'," \
+                        +"'QVEGE','QSOIL','QRUNOFF','QDRAI','QOVER','H2OSFC','ZWT','SNOWDP','H2OSOI','TSOI','TWS'," \
+                        +"'FSDS','FLDS','ALT','ALTMAX','SNOW_DEPTH','SOILICE','SOILLIQ','ZWT','ZWT_PERCH'," \
+                        +"'QDRAI_PERCH','QH2OSFC','FH2OSFC','FINUNDATED','SUBSIDENCE','MICROREL','DEPRESS_DEPTH','EXCLUDED_VOL'\n")
             else:
                 output.write(" hist_nhtfrq = "+ str(options.hist_nhtfrq)+"\n")
 
@@ -1262,7 +1315,7 @@ for i in range(1,int(options.ninst)+1):
           myline = myline+"'"+v.strip()+"'"
         myline=myline+"\n"
         output.write(myline+"\n")
-   
+
     if (options.spinup_vars and (not '20TR' in compset) and (not options.istrans)):
         output.write(" hist_empty_htapes = .true.\n")
         h0varst = " hist_fincl1 = "
@@ -1336,17 +1389,38 @@ for i in range(1,int(options.ninst)+1):
     if (options.surffile == ''):
       output.write(" fsurdat = '"+rundir+"/surfdata.nc'\n")
     else:
-      output.write(" fsurdat = '"+options.surffile+"'\n")      
-    
+      output.write(" fsurdat = '"+options.surffile+"'\n")
+
     if (options.var_soilthickness):
-        output.write(" use_var_soil_thick = .TRUE.\n") 
+        output.write(" use_var_soil_thick = .TRUE.\n")
+    if (options.topounits_atmdownscale):
+        output.write(" use_atm_downscaling_to_topunit = .true.\n")
+    if (options.topounits_raddownscale):
+        output.write(" use_top_solar_rad = .true.\n")
     if (options.no_budgets):
         output.write(" do_budgets = .false.\n")
+    # snow options
+    if (options.dust_snow_mixing):
+        output.write(" use_dust_snow_internal_mixing = .true.\n")
+    if (options.no_snicar_ad):
+        output.write(" use_snicar_ad = .false.\n")
+    if (options.use_extra_snow_layers):
+        output.write(" use_extrasnowlayers = .true.\n")
+    if (options.use_firn_percolation_and_compaction):
+        output.write(" use_firn_percolation_and_compaction = .true.\n")
+    # NGEE Arctic IM1
+    if (options.use_polygonal_tundra):
+        output.write(" use_polygonal_tundra = .true.\n")
+    if (options.use_arctic_init):
+        output.write(" use_arctic_init = .true.\n")
+    # NGEE Arctic IM2
+    if (options.use_IM2_hillslope_hydrology):
+        output.write(" use_IM2_hillslope_hydrology = .true.\n")
 
     #pft dynamics file for transient run
     if ('20TR' in compset or options.istrans):
         if (options.nopftdyn):
-            output.write(" flanduse_timeseries = ' '\n") 
+            output.write(" flanduse_timeseries = ' '\n")
         elif(options.pftdynfile !=''):
             output.write(" flanduse_timeseries = '"+options.pftdynfile+"'\n")
         else:
@@ -1379,8 +1453,8 @@ for i in range(1,int(options.ninst)+1):
         else:
           output.write( " stream_fldfilename_ndep = '"+options.ccsm_input+ \
             "/lnd/clm2/ndepdata/fndep_clm_rcp4.5_simyr1849-2106_1.9x2.5_c100428.nc'\n")
-        if (model_name == 'clm2'):  #set for older tags/branches (option was removed, this may not capture all tags 
-                                    #between rename to elm and removal of nitrif_dentrif)   
+        if (model_name == 'clm2'):  #set for older tags/branches (option was removed, this may not capture all tags
+                                    #between rename to elm and removal of nitrif_dentrif)
             output.write(" use_nitrif_denitrif = .true.\n")
         if (options.vsoilc):
             output.write(" use_vertsoilc = .true.\n")
@@ -1401,12 +1475,12 @@ for i in range(1,int(options.ninst)+1):
 #        if (options.CH4 and options.fates_nutrient == ''):
 #            output.write(" use_lch4 = .true.\n")
 #        elif (options.fates_nutrient != ''):
-#            output.write(" use_lch4 = .false.\n")  
+#            output.write(" use_lch4 = .false.\n")
         if (options.CH4):
             output.write(" use_lch4 = .true.\n")
         # APW: given RK suggests nitrif/denitrif is not correct w/o ch4 shuld this be for all nutrient enabled runs?
         elif (options.fates_nutrient != ''):
-            output.write(" use_lch4 = .true.\n")  
+            output.write(" use_lch4 = .true.\n")
         if (options.nofire):
             output.write(" use_nofire = .true.\n")
         if (options.C13):
@@ -1470,8 +1544,8 @@ for i in range(1,int(options.ninst)+1):
                 else:
                     output.write(" metdata_type = 'gswp3'\n")
                     output.write(" metdata_bypass = '"+options.ccsm_input+"/atm/datm7/" \
-                          +"/atm_forcing.datm7.GSWP3.0.5d.v2.c180716/cpl_bypass_full'\n")
-#                         +"atm_forcing.datm7.GSWP3.0.5d.v1.c170516/cpl_bypass_full'\n")
+#                        +"/atm_forcing.datm7.GSWP3.0.5d.v2.c180716/cpl_bypass_full'\n")
+                         +"atm_forcing.datm7.GSWP3.0.5d.v1.c170516/cpl_bypass_full'\n")
             elif (options.gswp3_w5e5):
                 output.write(" metdata_type = 'gswp3_w5e5'\n")
                 output.write(" metdata_bypass = '"+options.ccsm_input+"/atm/datm7/" \
@@ -1497,10 +1571,11 @@ for i in range(1,int(options.ninst)+1):
         elif options.metdir != 'none':
             if (options.daymet4 and options.gswp3):
                 output.write(" metdata_type = 'gswp3_daymet4'\n")
-            #else:
-            #    output.write(" metdata_type = 'gswp3v1_daymet'\n") # This needs to be updated for other types
+            elif (options.gswp3):
+                output.write(" metdata_type = 'gswp3'\n") # This needs to be updated for other types
+            elif (options.era5):
+                output.write(" metdata_type = 'era5'\n")
             output.write(" metdata_bypass = '%s'\n"%options.metdir)
-            
         # not reanalysis
         else:
             if (options.site_forcing == ''):
@@ -1531,7 +1606,7 @@ for i in range(1,int(options.ninst)+1):
         else:
           output.write(" aero_file = '"+options.ccsm_input+"/atm/cam/chem/" \
                          +"trop_mozart_aero/aero/aerosoldep_rcp4.5_monthly_1849-2104_1.9x2.5_c100402.nc'\n")
-    
+
     if (options.addt != 0):
       output.write(" add_temperature = "+str(options.addt)+"\n")
       output.write(" startdate_add_temperature = '"+str(options.sd_addt)+"'\n")
@@ -1617,7 +1692,7 @@ if (options.srcmods_loc != ''):
 if (options.caseroot == './' ):
     os.chdir(csmdir+"/cime/scripts/"+casename)
 else:
-    os.chdir(casedir)       
+    os.chdir(casedir)
 
 os.system('mkdir Srcfiles')
 #clean build if requested
@@ -1640,7 +1715,7 @@ else:
 if (options.caseroot == ''):
     os.chdir(csmdir+"/cime/scripts/"+casename)
 else:
-    os.chdir(casedir) 
+    os.chdir(casedir)
 
 #stream file modifications for site runs
 #Datm mods/ transient CO2 patch for transient run (datm buildnml mods)
@@ -1650,8 +1725,6 @@ if (not cpl_bypass):
     for s in myinput:
         if ('streams =' in s):
             myalign_year = 1 #startyear
-            if (options.align_year != -999):
-                myalign_year = options.align_year
             if (options.istrans or '20TR' in compset):
                 mypresaero = '"datm.streams.txt.presaero.trans_1850-2000 1850 1850 2000"'
                 myco2      = ', "datm.streams.txt.co2tseries.20tr 1766 1766 2010"'
@@ -1669,6 +1742,15 @@ if (not cpl_bypass):
                                    '"datm.streams.txt.CLMCRUNCEP.TPQW '+str(myalign_year)+ \
                                    ' '+str(startyear)+' '+str(endyear)+'  ", '+mypresaero+myco2+ \
                                    ', "datm.streams.txt.topo.observed 1 1 1"\n')
+            elif (options.gswp3): # default in elm seems to set myalign year for gswp3 to 12..?
+                print(str(myalign_year))
+                myoutput.write(' streams = "datm.streams.txt.CLMGSWP3v1.Solar '+str(myalign_year)+ \
+                                   ' '+str(startyear)+' '+str(endyear)+'  ", '+ \
+                                   '"datm.streams.txt.CLMGSWP3v1.Precip '+str(myalign_year)+ \
+                                   ' '+str(startyear)+' '+str(endyear)+'  ", '+ \
+                                   '"datm.streams.txt.CLMGSWP3v1.TPQW '+str(myalign_year)+ \
+                                   ' '+str(startyear)+' '+str(endyear)+'  ", '+mypresaero+myco2+ \
+                                   ', "datm.streams.txt.topo.observed 1 1 1"\n')
             else:
                 myoutput.write(' streams = "datm.streams.txt.CLM1PT.'+mylsm+'_USRDAT '+str(myalign_year)+ \
                                    ' '+str(startyear)+' '+str(endyear)+'  ", '+mypresaero+myco2+ \
@@ -1676,7 +1758,7 @@ if (not cpl_bypass):
         elif ('streams' in s):
             continue  #do nothing
         elif ('taxmode' in s):
-            if (options.cruncep or options.cruncepv8):
+            if (options.cruncep or options.cruncepv8 or options.gswp3):
                 taxst = "taxmode = 'cycle', 'cycle', 'cycle', 'extend', 'extend'"
             else:
                 taxst = "taxmode = 'cycle', 'extend', 'extend'"
@@ -1792,9 +1874,9 @@ if ((options.ensemble_file != '' or int(options.mc_ensemble) != -1) and (options
                     else:
                         param_min.append(float(s.split()[2]))
                         param_max.append(float(s.split()[3]))
-        input.close() 
+        input.close()
         n_parameters = len(param_names)
-    if (options.ensemble_file != ''):    
+    if (options.ensemble_file != ''):
         if (not os.path.isfile(options.ensemble_file)):
             print('Error:  ensemble file does not exist')
             sys.exit(1)
@@ -1805,7 +1887,7 @@ if ((options.ensemble_file != '' or int(options.mc_ensemble) != -1) and (options
         nsamples = 0
         for s in myinput:
             for j in range(0,n_parameters):
-                samples[j][nsamples] = float(s.split()[j]) 
+                samples[j][nsamples] = float(s.split()[j])
             nsamples=nsamples+1
         myinput.close()
     elif (int(options.mc_ensemble) > 0):
@@ -1819,17 +1901,17 @@ if ((options.ensemble_file != '' or int(options.mc_ensemble) != -1) and (options
 
     print('')
     print('')
-    print('Parameter ensembles selected:') 
-    print(str(n_parameters)+' parameters are being modified') 
+    print('Parameter ensembles selected:')
+    print(str(n_parameters)+' parameters are being modified')
     print(str(nsamples)+' parameter samples provided')
-  
+
     #total number of processors required in each pbs script
     np_total = int(options.np)*int(options.ng)
     #number of scripts required
     n_scripts = int(math.ceil(nsamples/float(options.ninst*options.ng)))
- 
+
     num=0
-    #Launch ensemble if requested 
+    #Launch ensemble if requested
     mysubmit_type = 'qsub'
     if ('cades' in options.machine or 'compy' in options.machine or 'ubuntu' in options.machine or 'cori' in options.machine or \
         options.machine == 'anvil' or options.machine == 'chrysalis'):
@@ -1895,7 +1977,8 @@ if ((options.ensemble_file != '' or int(options.mc_ensemble) != -1) and (options
         cnp = 'True'
         if (options.cn_only or options.c_only):
             cnp= 'False'
-        if ('docker' in options.machine or 'oic' in options.machine or 'cades' in options.machine or 'ubuntu' in options.machine):
+        if ('docker' in options.machine or 'oic' in options.machine or 'cades' in options.machine or 'ubuntu' in options.machine or
+            'ees' in options.machine or 'mac' in options.machine):
             mpicmd = 'mpirun'
             if ('cades' in options.machine):
                #mpicmd = '/software/dev_tools/swtree/cs400_centos7.2_pe2016-08/openmpi/1.10.3/centos7.2_gnu5.3.0/bin/mpirun'
@@ -1916,7 +1999,7 @@ if ((options.ensemble_file != '' or int(options.mc_ensemble) != -1) and (options
                ' --site '+options.site+' --model_name '+model_name
         if (options.constraints != ''):
             cmd = cmd + ' --constraints '+options.constraints
-        if (options.postproc_file != ''): 
+        if (options.postproc_file != ''):
             cmd = cmd + ' --postproc_file '+options.postproc_file
         if (options.spruce_treatments):
             cmd = cmd + ' --spruce_treatments'
