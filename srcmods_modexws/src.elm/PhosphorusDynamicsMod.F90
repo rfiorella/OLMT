@@ -67,6 +67,7 @@ contains
     !
     ! !LOCAL VARIABLES:
     integer :: g,c                    ! indices
+    integer :: begc, endc
 
     ! sensitivity testing
     integer :: sdate_sclp, sy_sclp, sm_sclp, sd_sclp ! scale pdep date componets
