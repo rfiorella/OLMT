@@ -1258,15 +1258,10 @@ contains
        ! CO2 (and C13O2) concentration: constant, prognostic, or diagnostic
        if (co2_type_idx == 0) then                    ! CO2 constant, value from namelist
          co2_ppmv_val = co2_ppmv
-#ifdef CPL_BYPASS
-       elseif (co2_type_idx /= 0) then                  ! CO2 constant, value from namelist
-         co2_ppmv_val = co2_ppmv
-#else
        else if (co2_type_idx == 1) then               ! CO2 prognostic, value from coupler field
          co2_ppmv_val = x2l(index_x2l_Sa_co2prog,i)
        else if (co2_type_idx == 2) then               ! CO2 diagnostic, value from coupler field
          co2_ppmv_val = x2l(index_x2l_Sa_co2diag,i)
-#endif
        else
          call endrun( sub//' ERROR: Invalid co2_type_idx, must be 0, 1, or 2 (constant, prognostic, or diagnostic)' )
        end if
@@ -1358,7 +1353,6 @@ contains
         !atmospheric CO2 (to be used for transient simulations only)
         if (atm2lnd_vars%loaded_bypassdata .eq. 0) then 
           ierr = nf90_open(trim(co2_file), nf90_nowrite, ncid)
-          if (ierr .ne. 0) call endrun(msg=' ERROR: Failed to open cpl_bypass input CO2 file' )
           ierr = nf90_inq_dimid(ncid, 'time', dimid)
           ierr = nf90_Inquire_Dimension(ncid, dimid, len = thistimelen)
           ierr = nf90_inq_varid(ncid, 'CO2', varid)
