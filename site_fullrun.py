@@ -71,9 +71,9 @@ parser.add_option("--pio_version", dest="pio_version", default='2', \
                       help = "PIO version (1 or 2)")
 
 # CASE options
-parser.add_option("--nyears_ad_spinup", dest="ny_ad", default=250, \
+parser.add_option("--nyears_ad_spinup", dest="ny_ad", default=200, \
                   help = 'number of years to run ad_spinup')
-parser.add_option("--nyears_final_spinup", dest="nyears_final_spinup", default='200', \
+parser.add_option("--nyears_final_spinup", dest="nyears_final_spinup", default=600, \
                   help="base no. of years for final spinup")
 parser.add_option("--nyears_transient", dest="nyears_transient", default=-1, \
                   help = 'number of years to run transient')
