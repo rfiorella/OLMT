@@ -357,8 +357,8 @@ parser.add_option("--var_list_pft", dest="var_list_pft", default="",help='Comma-
 # use topounit downscaling:
 parser.add_option("--topounits_atmdownscale", dest = "topounits_atmdownscale", default=False, \
                   help="Use atmospheric downscaling in topounits", action='store_true')
-parser.add_option("--topounits_raddownscale", dest = "topounits_raddownscale", default=False, \
-                  help="Downscale radiation input to topounits", action = "store_true")
+parser.add_option("--terrain_raddownscale", dest = "terrain_raddownscale", default=False, \
+                  help="cannopy/bare-ground top solar radiation downscaling based on terrain features", action = "store_true")
 # snow options:
 parser.add_option("--dust_snow_mixing", dest="dust_snow_mixing", default=False, \
                   help = "Use Hao et al. dust/snow mixing albedo parameterization", action="store_true")
@@ -1476,7 +1476,7 @@ for i in range(1,int(options.ninst)+1):
         # topounits included surface data, by default, separated 17 PFTs into 15 natpfts and 2 cfts.
         # so have to switch on following namelist 
         output.write(" create_crop_landunit = .true.\n")
-    if (options.topounits_raddownscale):
+    if (options.terrain_raddownscale):
         output.write(" use_top_solar_rad = .true.\n")
     if (options.no_budgets):
         output.write(" do_budgets = .false.\n")
