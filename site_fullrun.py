@@ -71,9 +71,9 @@ parser.add_option("--pio_version", dest="pio_version", default='2', \
                       help = "PIO version (1 or 2)")
 
 # CASE options
-parser.add_option("--nyears_ad_spinup", dest="ny_ad", default=250, \
+parser.add_option("--nyears_ad_spinup", dest="ny_ad", default=200, \
                   help = 'number of years to run ad_spinup')
-parser.add_option("--nyears_final_spinup", dest="nyears_final_spinup", default='200', \
+parser.add_option("--nyears_final_spinup", dest="nyears_final_spinup", default=600, \
                   help="base no. of years for final spinup")
 parser.add_option("--nyears_transient", dest="nyears_transient", default=-1, \
                   help = 'number of years to run transient')
@@ -269,8 +269,8 @@ parser.add_option("--use_firn_percolation_and_compaction ", dest = "use_firn_per
 #topounits
 parser.add_option("--topounits_atmdownscale", dest = "topounits_atmdownscale", default=False,
                   help="Use atmospheric downscaling in topounits", action='store_true')
-parser.add_option("--topounits_raddownscale", dest = "topounits_raddownscale", default=False,
-                  help="Use radiation downscaling in topounits", action='store_true')
+parser.add_option("--terrain_raddownscale", dest = "terrain_raddownscale", default=False,
+                  help="cannopy/bare-ground top solar radiation downscaling based on terrain features", action='store_true')
 # polygonal tundra:
 parser.add_option("--use_polygonal_tundra", dest="use_polygonal_tundra", default=False, \
                   help= "Turn on the polygonal tundra parameterizations, NGEE Arctic Phase 3 IM1", action="store_true")
@@ -751,8 +751,8 @@ for row in AFdatareader:
         # topounits
         if (options.topounits_atmdownscale):
             basecmd = basecmd + ' --topounits_atmdownscale'
-        if (options.topounits_raddownscale):
-            basecmd = basecmd + ' --topounits_raddownscale'
+        if (options.terrain_raddownscale):
+            basecmd = basecmd + ' --terrain_raddownscale'
         # polygonal tundra
         if (options.use_polygonal_tundra):
             basecmd = basecmd + ' --use_polygonal_tundra'
