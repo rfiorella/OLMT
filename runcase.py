@@ -255,6 +255,8 @@ parser.add_option("--no_dynroot", dest="no_dynroot", default=False, \
                   help = 'Turn off dynamic root distribution', action="store_true")
 parser.add_option("--vertsoilc", dest="vsoilc", default=False, \
                   help = 'To turn on CN with multiple soil layers, excluding CENTURY C module (CLM4ME on as well)', action="store_true")
+parser.add_option("--more_vertlayers", dest="more_vertlayers", default=False, \
+                  help = 'Turn on more vertical layers feature in ELM', action="store_true")
 parser.add_option("--centbgc", dest="centbgc", default=False, \
                   help = 'To turn on CN with multiple soil layers, CENTURY C module (CLM4ME on as well)', action="store_true")
 parser.add_option("--CH4", dest="CH4", default=False, \
@@ -1479,6 +1481,8 @@ for i in range(1,int(options.ninst)+1):
         output.write(" create_crop_landunit = .true.\n")
     if (options.terrain_raddownscale):
         output.write(" use_top_solar_rad = .true.\n")
+    if (options.more_vertlayers):
+        output.write(" more_vertlayers = .true.\n")
     if (options.no_budgets):
         output.write(" do_budgets = .false.\n")
     # snow options

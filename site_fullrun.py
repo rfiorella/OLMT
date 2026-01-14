@@ -203,6 +203,8 @@ parser.add_option("--vertsoilc", dest="vsoilc", default=False, action="store_tru
                   help = 'To turn on CN with multiple soil layers, excluding CENTURY C module (CLM4ME on as well)')
 parser.add_option("--centbgc", dest="centbgc", default=False, action="store_true", \
                   help = 'To turn on CN with multiple soil layers, CENTURY C module (CLM4ME on as well)')
+parser.add_option("--more_vertlayers", dest="more_vertlayers", default=False, action="store_true", \
+                  help = 'Turn on more vertical layers feature in ELM')
 parser.add_option("--CH4", dest="CH4", default=False, action="store_true", \
                   help = 'To turn on CN with CLM4me')
 parser.add_option("--fates", dest="fates", default=False, action="store_true", \
@@ -638,6 +640,8 @@ for row in AFdatareader:
             basecmd = basecmd+' --vertsoilc'
         if (options.centbgc):
             basecmd = basecmd+' --centbgc'
+        if (options.more_vertlayers):
+            basecmd = basecmd+' --more_vertlayers'
         if (options.c_only):
             basecmd = basecmd+' --c_only'
         if (options.cn_only):
